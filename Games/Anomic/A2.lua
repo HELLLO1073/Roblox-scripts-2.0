@@ -1,9 +1,11 @@
-local mainName = "Anomic V | 2.7.8" -- TSX is gay, who or what ever that is
+--// Anomic Script, old and buggy could use a rewrite entirely i admit
+
+local mainName = "Anomic V | 2.7.8" 
 if game:GetService("CoreGui"):FindFirstChild(mainName) then
     game.CoreGui[mainName]:Destroy()
 end
 
-print("Loading | LIB") -- Your a big hacker arent you, You got past my one github loadstring obfuscation, lol
+print("Loading | LIB") 
 
 -- Library
 local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/GreenDeno/Venyx-UI-Library/main/source.lua"))()

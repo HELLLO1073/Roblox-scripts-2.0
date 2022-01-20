@@ -6,6 +6,9 @@ if game.PlaceId == 4581966615 then -- anomic
         loadstring(game:HttpGet("https://raw.githubusercontent.com/HELLLO1073/Roblox-scripts-2.0/main/Games/Unit1968/main(source).lua", true))()     
             else if game.PlaceId == 413424176 then
             loadstring(game:HttpGet("https://raw.githubusercontent.com/HELLLO1073/Roblox-scripts-2.0/main/Games/CloneTycoon/CT-Destroyer.lua", true))()   
+                else if game.PlaceId == 6717202874 then
+                    loadstring(game:HttpGet("https://raw.githubusercontent.com/HELLLO1073/Roblox-scripts-2.0/main/Games/EasyFPS/EZFPS(source).lua", true))()   
+                end
             end
         end
     end   

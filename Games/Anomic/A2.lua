@@ -1243,7 +1243,7 @@ wepSection:addToggle("Tool Sniper", nil, function(state)
     if state then  
         local oldCFrame = LPlayer.Character.HumanoidRootPart.CFrame         
         for i,v in pairs(game:GetService("Workspace").Entities:GetChildren()) do            
-            if v.Name == "ToolModel" and not v:FindFirstChild("PlayerWhoDropped") then    
+            if v:IsA("Model") and v.Name == "ToolModel" and LPlayer.Character and v.Handle and not v:FindFirstChild("PlayerWhoDropped") then
                 getTool(v,oldCFrame)                                
             end
         end

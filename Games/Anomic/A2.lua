@@ -763,7 +763,7 @@ end)
 
 plrApp:addToggle("Outfit Editer", nil, function(v)
     LPlayer.PlayerGui.AvatarEditor.Enabled = v
-    LPlayer.PlayerGui.AvatarEditor.WearButton.Enabled = v
+    LPlayer.PlayerGui.AvatarEditor.WearButton.Visible = not v
 end)
 plrApp:addDropdown("Presets", {"Black", "Glitch", "Black & White", "Hacker"}, function(t)
     if t == "Black" then

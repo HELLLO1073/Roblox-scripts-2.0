@@ -1,6 +1,6 @@
 --// Anomic Script, old and buggy could use a rewrite entirely i admit
 
-local mainName = "Anomic V | 2.7.8" 
+local mainName = "Anomic V | 2.7.9" 
 if game:GetService("CoreGui"):FindFirstChild(mainName) then
     game.CoreGui[mainName]:Destroy()
 end
@@ -8,7 +8,7 @@ end
 print("Loading | LIB") 
 
 -- Library
-local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/GreenDeno/Venyx-UI-Library/main/source.lua"))()
+local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/HELLLO1073/Roblox-scripts-2.0/main/UIS/venyxUI-mod.lua"))()
 local Main = library.new(mainName)
 
 -- // Tabs
@@ -115,6 +115,7 @@ local esp_tracer_orig  = "Bottom"
 local esp_Main_Colour  = Color3.fromRGB(255, 255, 255)
 local rainbow_char     = false
 local rainbow_hair     = false
+local esp_tools        = false
 -- Player
 local CSEvents = game:GetService("ReplicatedStorage"):WaitForChild("_CS.Events")
 local teamList = require(game:GetService("ReplicatedStorage").Client.TeamList)
@@ -154,7 +155,6 @@ local folderImpacts = game:GetService("Workspace").RayIgnore.BulletHoles
 
 print("Loading | TeamMod")
 for i,v in pairs(teamList) do    
-    v.DataType = v.DataType .. " :  Anomic V"   
     v.Spawns = { "Arway", "Sheriff Station", "Eastdike", "Eaphis Plateau", "Pahrump", "Okby Steppe", "Depository", "Airfield", "Depot", "Clinic", "Towing Company"}    
 end
 
@@ -189,9 +189,9 @@ local function bypass()
                     if shotgunMod1 and tostring(self) == "AmmoRemover" then                        
                         return nil
                     end
-                    if shotgunMod2 and tostring(self) == "RayDrawer" then                        
+                    --[[if shotgunMod2 and tostring(self) == "RayDrawer" then                        
                         return nil
-                    end                    
+                    end]]                    
                 end
                 if tostring(method) == "Fire" then
                     if Rmod and tostring(self) == "ShootAnim" then
@@ -217,7 +217,7 @@ local colors = {
 }
 function setTheme()
    if LPlayer.PlayerGui:FindFirstChild("MainUIHolder") and LPlayer ~= nil  then 
-       print("Theme set")
+       --print("Theme set")
        LPlayer.PlayerGui.MainMenu.ButtonBar.Teams.BackgroundColor3 = colors.grey
        LPlayer.PlayerGui.MainMenu.ButtonBar.Spawn.BackgroundColor3 = colors.lightGrey
        LPlayer.PlayerGui.MainMenu.ButtonBar.Editor.BackgroundColor3 = colors.grey
@@ -499,8 +499,7 @@ local xdisplay = {}
 function xdisplay:addItemDisplay(player)
 	if player.Character.UpperTorso:FindFirstChild("ItemDisplay") then		
 		player.Character.UpperTorso["ItemDisplay"]:Destroy()		
-	end
-	print("Added display to " .. player.Name)
+	end	
 	local ItemDisplay = Instance.new("BillboardGui")	
 	local UIGridLayout = Instance.new("UIGridLayout")
 
@@ -559,18 +558,16 @@ local function refreshDisplay(plr)
     end     
 end
 bypass()
-print("Loading | 15%")
-
 ASection1:addToggle("Toggle Hitboxes", nil, function(v)
     Hitboxes = v
 end)
 ASection1:addSlider("Hitbox Size", 1, 0, 55, function(v)
     headHitboxSize = v
 end)
-ASection2:addToggle("Infinite Shotgun Ammo", nil, function(x)   
+--[[ASection2:addToggle("Infinite Shotgun Ammo", nil, function(x)   
     shotgunMod2 = x    
     bypass()
-end)
+end)]]
 ASection2:addToggle("Ghost Shotgun", nil, function(x)   
     shotgunMod1 = x    
     bypass()
@@ -766,6 +763,7 @@ end)
 
 plrApp:addToggle("Outfit Editer", nil, function(v)
     LPlayer.PlayerGui.AvatarEditor.Enabled = v
+    LPlayer.PlayerGui.AvatarEditor.WearButton.Enabled = v
 end)
 plrApp:addDropdown("Presets", {"Black", "Glitch", "Black & White", "Hacker"}, function(t)
     if t == "Black" then
@@ -908,6 +906,9 @@ end)
 EspSection1:addToggle("ESP status level", nil, function(state)
     esp_WantedLevel = state
 end)
+EspSection1:addToggle("Tool ESP", nil, function(state)
+    esp_tools = state
+end)
 EspSection1:addColorPicker("ESP Main Color", Color3.fromRGB(255, 255, 255), function(s)
     esp_Main_Colour = s
 end)
@@ -945,21 +946,6 @@ MiscEsp:addButton("Printer ESP", function()
             a.ZIndex = 0
             a.Transparency = 0.3
             a.Color = BrickColor.new("Lime green")
-        end
-    end
-end)
-
-MiscEsp:addButton("Gun ESP", function()
-    for i,v in pairs(game:GetService("Workspace").Entities:GetChildren()) do
-        if v:IsA("Model") and v.Name == "ToolModel" then
-            local a = Instance.new("BoxHandleAdornment")
-            a.Name = v.Name:lower().."_alwayswinAV"
-            a.Parent = v.hitbox
-            a.Adornee = v
-            a.AlwaysOnTop = true
-            a.ZIndex = 0
-            a.Transparency = 0.3
-            a.Color = BrickColor.new("Really red")
         end
     end
 end)
@@ -1155,9 +1141,9 @@ LPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(1620.60095, -65.4234238, 
 
 teleSection2:addButton("Police Station", function()
 if currentVehicle ~= nil then
-currentVehicle:SetPrimaryPartCFrame(CFrame.new(3894.29224, -2.04217577, -3309.31274, 0.819154441, 5.08817486e-08, 0.573573053, -8.20474284e-08, 1, 2.84667561e-08, -0.573573053, -7.03788601e-08, 0.819154441) * CFrame.new(0,5,0))
+currentVehicle:SetPrimaryPartCFrame(CFrame.new(1613.32397, -62.9234428, -1272.24634, 0.999857605, -3.98448172e-08, 0.0168763287, 4.06155785e-08, 1, -4.53283135e-08, -0.0168763287, 4.60073011e-08, 0.999857605) * CFrame.new(0,5,0))
 else 
-LPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(3894.29224, -2.04217577, -3309.31274, 0.819154441, 5.08817486e-08, 0.573573053, -8.20474284e-08, 1, 2.84667561e-08, -0.573573053, -7.03788601e-08, 0.819154441)end end)
+LPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(1613.32397, -62.9234428, -1272.24634, 0.999857605, -3.98448172e-08, 0.0168763287, 4.06155785e-08, 1, -4.53283135e-08, -0.0168763287, 4.60073011e-08, 0.999857605)end end)
 teleSection2:addButton("Depository", function()
 if currentVehicle ~= nil then
     currentVehicle:SetPrimaryPartCFrame(CFrame.new(2051.33301, -67.4034195, -1436.65967, 0.989166439, 0, 0.146798298, 0, 1, 0, -0.146798298, 0, 0.989166439) * CFrame.new(0,5,0))
@@ -1226,7 +1212,7 @@ local kitSpammerEnabled = false
 BuySectionMisc2:addToggle("Kit Spammer (Requires right role)", nil, function(state)
     kitSpammerEnabled = state
 end)
-function getTool(t,old)                  
+--[[function getTool(t,old)                  
     LPlayer.Character.HumanoidRootPart.CFrame = t.Handle.CFrame * CFrame.new(0,1,0)                  
     game:GetService("ReplicatedStorage"):FindFirstChild("_CS.Events").Dropper:FireServer(t,"PickUp")                   
     wait()   
@@ -1249,17 +1235,17 @@ wepSection:addToggle("Tool Sniper", nil, function(state)
         end
     end    
 end)
-function getCurrentVehicle()   
-    if LPlayer.Character.Humanoid.SeatPart ~= nil then
-        return LPlayer.Character.Humanoid.SeatPart.Parent        
-    end   
-end
 wepSection:addToggle("Auto Store items", nil, function(state)
     autoStore = state
 end)
 wepSection:addToggle("Backpack Pass", nil, function(state)
    LPlayer.PlayerScripts.OwnsBackpackPass.Value = state
-end)
+end)]]
+function getCurrentVehicle()   
+    if LPlayer.Character.Humanoid.SeatPart ~= nil then
+        return LPlayer.Character.Humanoid.SeatPart.Parent        
+    end   
+end
 miscSection:addButton("Rejoin", function()
     game:GetService("TeleportService"):Teleport(game.PlaceId, game:GetService("Players").LocalPlayer)
 end)
@@ -1808,9 +1794,34 @@ game:GetService("RunService").RenderStepped:connect(function()
             end
         end
     end
+    if esp_tools then        
+        for i,v in pairs(game:GetService("Workspace").Entities:GetChildren()) do
+            if v:IsA("Model") and v.Name == "ToolModel" and LPlayer.Character and v.Handle and not v:FindFirstChild("PlayerWhoDropped") then
+                local Handle = v.Handle
+                local name = Handle.ToolBG.ToolName.Value
+                local dist = (LPlayer.Character.HumanoidRootPart.Position-Handle.Position).Magnitude
+                local vec, onscreen = game.Workspace.CurrentCamera:WorldToViewportPoint(Handle.Position)
+                if onscreen then
+                    local toolTag = Drawing.new("Text")
+                    toolTag.Text = name.." | "..math.round(dist)
+                    toolTag.Outline = true
+                    toolTag.Color = Color3.fromRGB(255, 222, 0)
+                    toolTag.OutlineColor = Color3.fromRGB(0,0,0)
+                    toolTag.Visible = true
+                    toolTag.Font = Drawing.Fonts.UI
+                    toolTag.Transparency = 1
+                    toolTag.Position = Vector2.new(vec.X,vec.Y)
+                    coroutine.wrap(function()
+                        game.RunService.RenderStepped:Wait()
+                        toolTag:Remove()
+                    end)()
+                 end
+            end
+        end
+    end    
 end)    
-print("Loading | 70%")
-		
+
+print("Loading | 70%")		
 wait(.5)
 notify("Anomic V", "Scripts made by H3LLL0 and Krypton - Forum name: F A Z E D")
 wait(.3)
@@ -1818,12 +1829,14 @@ notify("Anomic V", "Info can be found in discord")
 wait(.3)
 bypass()
 setTheme()
+
 LPlayer.CharacterAdded:Connect(function()
     if _G.Enabled then
         wait(1)    
         setTheme()
     end
 end)
+
 print("Loading | 80%")
 game.Players.LocalPlayer.CharacterAdded:Connect(function()
     wait(2)

@@ -2063,6 +2063,10 @@ do
 		end
 	end
 	
+	function roundNumber(num, numDecimalPlaces)
+        	return tonumber(string.format("%." .. (numDecimalPlaces or 0) .. "f", num))
+    	end
+	
 	function section:updateSlider(slider, title, value, min, max, lvalue)
 		slider = self:getModule(slider)
 		
@@ -2078,7 +2082,7 @@ do
 		end
 		
 		percent = math.clamp(percent, 0, 1)
-		value = value or math.floor(min + (max - min) * percent)
+		value = value or roundNumber(min + (max - min) * percent,1)
 		
 		slider.TextBox.Text = value
 		utility:Tween(bar.Fill, {Size = UDim2.new(percent, 0, 1, 0)}, 0.1)

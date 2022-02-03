@@ -1,6 +1,6 @@
 --// Anomic Script, old and buggy could use a rewrite entirely i admit.
 
-local mainName = "Anomic V | 2.8.0" 
+local mainName = "Anomic V | 2.8.1" 
 if game:GetService("CoreGui"):FindFirstChild(mainName) then
     game.CoreGui[mainName]:Destroy()
 end
@@ -150,6 +150,11 @@ local SpeedSDelay = 0.05
 local shotMulti = false
 local shotMultiAmmount = 1
 local targetHighlight = false
+
+local customHitSound = false
+local customHitSoundType = "Skeet"
+local alwaysHeadShot = false
+
 _G.flySpeed = 1
 _G.JumpHeight = 30
 _G.Enabled = true
@@ -191,10 +196,7 @@ local function bypass()
                 if tostring(method) == "FireServer" then
                     if shotgunMod1 and tostring(self) == "AmmoRemover" then                        
                         return nil
-                    end
-                    --[[if shotgunMod2 and tostring(self) == "RayDrawer" then                        
-                        return nil
-                    end]]                    
+                    end                           
                 end
                 if tostring(method) == "Fire" then
                     if Rmod and tostring(self) == "ShootAnim" then
@@ -205,6 +207,7 @@ local function bypass()
         end
     end)         
 end
+
 print("Loading anti kick")
 local protect = newcclosure or protect_function
 hookfunction(game:GetService("Players").LocalPlayer.Kick,protect(function() 
@@ -618,9 +621,18 @@ end)
 ASection22:addToggle("No Impacts", nil, function(x)   
     BDelete = x        
 end)
+ASection22:addToggle("Always headshot", nil, function(x)   
+    alwaysHeadShot = x        
+end)
 ASection22:addToggle("No visual recoil", nil, function(x)   
     Rmod = x
     bypass()
+end)
+ASection22:addToggle("Custom hit sound", nil, function(x)   
+    customHitSound = x
+end)
+ASection22:addDropdown("Hit sound", {"Skeet", "Rust", "COD", "Test"}, function(x)
+    customHitSoundType = x
 end)
 ASection22:addToggle("Gun Silencer", nil, function(x)   
     for i,v in pairs(LPlayer.Character:GetChildren()) do
@@ -1870,6 +1882,48 @@ game.Players.LocalPlayer.CharacterAdded:Connect(function()
     wait(2)
     bypass()
 end)
+
+local function HitSound()
+    local sound = Instance.new("Sound",workspace)
+    if customHitSoundType == "Skeet" then
+        sound.SoundId = "rbxassetid://5447626464"
+    elseif customHitSoundType == "Rust" then
+        sound.SoundId = "rbxassetid://5043539486"
+    elseif customHitSoundType == "COD" then
+        sound.SoundId = "rbxassetid://5952120301" 
+    elseif customHitSoundType == "Test" then
+        sound.SoundId = "rbxassetid://4836574859"
+    end
+    sound.Looped = false
+    sound.Volume = 2
+    sound:Play()
+end
+
+local mt = getrawmetatable(game)
+setreadonly(mt, false)
+local namecall = mt.__namecall
+
+mt.__namecall = function(self,...)
+    local args = {...}
+    local method = getnamecallmethod()
+
+    if customHitSound or alwaysHeadShot then
+        if tostring(self) == "WeaponServer" and tostring(method) == "FireServer" then       
+            if tostring(args[1]) == "Player" then  
+                if customHitSoundType then
+                    HitSound()
+                end
+                if alwaysHeadShot then
+                    local player = args[2].Parent            
+                    args[4] = player.Head           
+                end 
+            end
+            return self.FireServer(self, unpack(args))        
+        end
+    end
+
+	return namecall(self,...)
+end
 
 Main:SelectPage(Main.pages[1], true)
 print("Loading | 100%")

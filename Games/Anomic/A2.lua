@@ -1,6 +1,6 @@
 --// Anomic Script, old and buggy could use a rewrite entirely i admit.
 
-local mainName = "Anomic V | 2.8.1" 
+local mainName = "Anomic V | 2.8.2" 
 if game:GetService("CoreGui"):FindFirstChild(mainName) then
     game.CoreGui[mainName]:Destroy()
 end
@@ -60,9 +60,7 @@ local BuySectionMisc2 = Buy:addSection("Misc / Troll")
 
 -- // Miscellaneous Section
 local miscSection = misc:addSection("Miscellaneous")
-local wepSection = misc:addSection("Miscellaneous Tools")
 local CarSection = misc:addSection("Miscellaneous Vehicle")
-local AnimationSection = misc:addSection("Animations")
 local boomSection = misc:addSection("Boombox Player (Hold Boombox)")
 
 -- // UI Section
@@ -156,9 +154,9 @@ local customHitSoundType = "Skeet"
 local alwaysHeadShot = false
 
 _G.flySpeed = 1
-_G.JumpHeight = 30
-_G.Enabled = true
-_G.ThemeMode = "Purple" -- Red,Green,White
+local lJumpHeight = 30
+local ThemeEnabled = true
+local ThemeMode = "Purple" -- Red,Green,White
 local folderImpacts = game:GetService("Workspace").RayIgnore.BulletHoles
 
 print("Loading | TeamMod")
@@ -278,26 +276,26 @@ function setTheme()
            LPlayer.PlayerGui.MainUIHolder.MenuBar.ImageLabel.BackgroundColor3 = colors.black
            LPlayer.PlayerGui.MainUIHolder.MenuBar.ImageLabel.ImageColor3 = Color3.fromRGB(30,30,30)
            LPlayer.PlayerGui.MainUIHolder.MenuBar.BackgroundColor3 = Color3.fromRGB(15,15,15)
-           if _G.ThemeMode == "Purple" then
+           if ThemeMode == "Purple" then
                LPlayer.PlayerGui.MainUIHolder.StaminaBar.Background.Bar.BackgroundColor3 = Color3.fromRGB(255, 29, 108) -- Stam
-               else if _G.ThemeMode == "Red" then
+               else if ThemeMode == "Red" then
                    LPlayer.PlayerGui.MainUIHolder.StaminaBar.Background.Bar.BackgroundColor3 = Color3.fromRGB(199, 0, 0) -- Stam
-                   else if _G.ThemeMode == "Green" then
+                   else if ThemeMode == "Green" then
                        LPlayer.PlayerGui.MainUIHolder.StaminaBar.Background.Bar.BackgroundColor3 = Color3.fromRGB(41, 206, 0) -- Stam
-                       else if _G.ThemeMode == "White" then
+                       else if ThemeMode == "White" then
                            LPlayer.PlayerGui.MainUIHolder.StaminaBar.Background.Bar.BackgroundColor3 = Color3.fromRGB(255, 255, 255) -- Stam
                            LPlayer.PlayerGui.MainUIHolder.StaminaBar.Background.StatNum.TextColor3 = Color3.fromRGB(0, 0, 0)
                        end
                    end
                end
            end
-           if _G.ThemeMode == "Purple" then
+           if ThemeMode == "Purple" then
                LPlayer.PlayerGui.MainUIHolder.MenuBar.CashDisplay.TextColor3 = Color3.fromRGB(150,0,150) -- Cash
-               else if _G.ThemeMode == "Red" then
+               else if ThemeMode == "Red" then
                    LPlayer.PlayerGui.MainUIHolder.MenuBar.CashDisplay.TextColor3 = Color3.fromRGB(201, 0, 0) -- Cash
-                   else if _G.ThemeMode == "Green" then
+                   else if ThemeMode == "Green" then
                        LPlayer.PlayerGui.MainUIHolder.MenuBar.CashDisplay.TextColor3 = Color3.fromRGB(93, 233, 0) -- Cash
-                       else if _G.ThemeMode == "White" then
+                       else if ThemeMode == "White" then
                            LPlayer.PlayerGui.MainUIHolder.MenuBar.CashDisplay.TextColor3 = Color3.fromRGB(255, 255, 255) -- Cash
                        end
                    end
@@ -583,10 +581,6 @@ end)
 ASection1:addSlider("Hitbox Transparency", hitboxTransparency, 0, 1, function(v)
     hitboxTransparency = v
 end)
---[[ASection2:addToggle("Infinite Shotgun Ammo", nil, function(x)   
-    shotgunMod2 = x    
-    bypass()
-end)]]
 ASection2:addToggle("Ghost Shotgun", nil, function(x)   
     shotgunMod1 = x    
     bypass()
@@ -1129,7 +1123,11 @@ OtherSection0:addToggle("Arrest all", nil, function(state)
     autoArrest = state
 end)
 
-
+function getCurrentVehicle()   
+    if LPlayer.Character.Humanoid.SeatPart ~= nil then
+        return LPlayer.Character.Humanoid.SeatPart.Parent        
+    end   
+end
 teleSection1:addKeybind("Click TP Keybind", nil, function()
     if mouse.Target then 
         if getCurrentVehicle() ~= nil then
@@ -1295,11 +1293,6 @@ end)
 wepSection:addToggle("Backpack Pass", nil, function(state)
    LPlayer.PlayerScripts.OwnsBackpackPass.Value = state
 end)]]
-function getCurrentVehicle()   
-    if LPlayer.Character.Humanoid.SeatPart ~= nil then
-        return LPlayer.Character.Humanoid.SeatPart.Parent        
-    end   
-end
 miscSection:addButton("Rejoin", function()
     game:GetService("TeleportService"):Teleport(game.PlaceId, game:GetService("Players").LocalPlayer)
 end)
@@ -1402,13 +1395,13 @@ boomSection:addButton("End of time", function()
 print("Loading | 30%")
 
 ThemeSection:addToggle("Theme Enabled", true, function(state)
-    _G.Enabled = state
-    if _G.Enabled then
+    ThemeEnabled = state
+    if ThemeEnabled then
         setTheme()
     end
 end)
 ThemeSection:addDropdown("Theme Mode", {"Purple", "Red", "Green", "White"}, function(valuex)
-    _G.ThemeMode = valuex
+    ThemeMode = valuex
     setTheme()
 end)
 UISection:addKeybind("GUI Keybind", Enum.KeyCode.LeftAlt, function()    
@@ -1570,7 +1563,7 @@ UIS.InputBegan:connect(function(UserInput)
         Action(LPlayer.Character.Humanoid, function(self)
             if self:GetState() == Enum.HumanoidStateType.Jumping or self:GetState() == Enum.HumanoidStateType.Freefall then
                 Action(self.Parent.HumanoidRootPart, function(self)
-                    self.Velocity = Vector3.new(0, _G.JumpHeight, 0);
+                    self.Velocity = Vector3.new(0, lJumpHeight, 0);
                 end)
             end
         end)
@@ -1583,7 +1576,7 @@ UIS.InputBegan:connect(function(process)
             Action(LPlayer.Character.Humanoid, function(self)
                 if self:GetState() == Enum.HumanoidStateType.Jumping or self:GetState() == Enum.HumanoidStateType.Freefall then
                     Action(self.Parent.HumanoidRootPart, function(self)
-                        self.Velocity = Vector3.new(0, _G.JumpHeight, 0);
+                        self.Velocity = Vector3.new(0, lJumpHeight, 0);
                     end)
                 end
             end)            
@@ -1628,6 +1621,7 @@ UIS.InputBegan:Connect(function(a)
 end)
 
 print("Loading | 50%")
+
 game:GetService("RunService").RenderStepped:connect(function()       
    if esp_Enabled then       
         for _,v in pairs(Players:GetChildren()) do
@@ -1866,19 +1860,20 @@ game:GetService("RunService").RenderStepped:connect(function()
         end
     end    
 end)
+
 notify("Anomic V", "Scripts made by H3LLL0 and Krypton - Forum name: F A Z E D")
 notify("Anomic V", "Info can be found in discord")
+
 wait(.3)
+
 bypass()
 setTheme()
 
 LPlayer.CharacterAdded:Connect(function()
-    if _G.Enabled then
+    if ThemeEnabled then
         wait(1)    
         setTheme()
     end
-end)
-game.Players.LocalPlayer.CharacterAdded:Connect(function()
     wait(2)
     bypass()
 end)

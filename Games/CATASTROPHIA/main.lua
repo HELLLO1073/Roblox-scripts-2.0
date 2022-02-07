@@ -1,7 +1,20 @@
 --// By H3#3534
---// Keybind: Right control
 
+--// Keybind: Right control
 Library = loadstring(game:HttpGet('https://pastebin.com/raw/EkM5gta4'))();
+
+--// Varibles
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+local Mouse = LocalPlayer:GetMouse()
+local Camera = workspace.CurrentCamera
+
+local Loot = game:GetService("Workspace"):WaitForChild("Loot")
+local animals = game:GetService("Workspace"):WaitForChild("Animals")
+local items = game:GetService("Workspace"):WaitForChild("Items")
+local objectFolder = game:GetService("Workspace"):WaitForChild("Suroviny")
+local Monuments = game:GetService("Workspace").Monuments
+local oldWells = Monuments:WaitForChild("OldWells")
 
 loadstring(game:HttpGet('https://raw.githubusercontent.com/HELLLO1073/Roblox-scripts-2.0/main/Games/CATASTROPHIA/bypass.lua'))();
 Library:Notify('Bypasser')
@@ -30,7 +43,13 @@ local lPlayerMain = playerBox:AddTab('Player');
 
 lPlayerMain:AddLabel('Visuals');
 lPlayerMain:AddSlider('CameraFOV', { Text = 'Camera FOV', Default = math.round(workspace.CurrentCamera.FieldOfView), Min = 0, Max = 120, Rounding = 0 });
-
+lPlayerMain:AddToggle('ThirdPerson', { Text = 'Third Person' }):OnChanged(function()
+    if Toggles.ThirdPerson.Value then
+        LocalPlayer.CameraMode = Enum.CameraMode.Classic
+    else
+        LocalPlayer.CameraMode = Enum.CameraMode.LockFirstPerson
+    end
+end);
 
 local VisualsTab = MainWind:AddTab('Visuals');
 local PlayerESPBox = VisualsTab:AddLeftTabbox();
@@ -137,19 +156,6 @@ task.spawn(function()
         end;
     end;
 end);
-
---// Varibles
-local Players = game:GetService("Players")
-local LocalPlayer = Players.LocalPlayer
-local Mouse = LocalPlayer:GetMouse()
-local Camera = workspace.CurrentCamera
-
-local Loot = game:GetService("Workspace"):WaitForChild("Loot")
-local animals = game:GetService("Workspace"):WaitForChild("Animals")
-local items = game:GetService("Workspace"):WaitForChild("Items")
-local objectFolder = game:GetService("Workspace"):WaitForChild("Suroviny")
-local Monuments = game:GetService("Workspace").Monuments
-local oldWells = Monuments:WaitForChild("OldWells")
 
 --// functions
 local function xray(trans)

@@ -3,68 +3,12 @@
 
 Library = loadstring(game:HttpGet('https://pastebin.com/raw/EkM5gta4'))();
 
-local badRemotesArgs = {
-    "RayTranspa";
-    "NoRoot";
-    "RayNonCol";
-    "NonCollide";
-    "NoHumanoid";
-    "RootColOFF";
-    "ChybaKlienta";
-    "Gravity";
-    "JinyRoot";
-    "JinyHum";
-    "NoCharPar";
-    "NoChar";
-    "Gui";
-    "LightChild";
-    "FreeCam";
-    "RemoteEvent01";
-    "HipHeight";
-    "JumpPower";
-    "HumWalk";
-    "CamSubj";
-    "Mover";
-    "CharScr";
-    "PlrScr";
-    "CharChild";
-    "Global"
-}
-local remoteNames = {"Truhla","OpenChest3","OtevriBednu","OtevriBednu7"}
-local other_remotes = {"HlaseniChyby"}
-local bypassed = false
-
-local function bypasser()
-    local success, response = pcall(function()
-        local game_mt = getrawmetatable(game)
-        setreadonly(game_mt, false)
-        local namecall = game_mt.__namecall
- 
-        game_mt.__namecall = function(self,...)
-            local args = {...}
-            local method = getnamecallmethod()            
-            if method == "Kick" then                
-                return nil                    
-            end        
-            if tostring(method) == "FireServer" and table.find(remoteNames, tostring(self)) then
-                if table.find(badRemotesArgs,tostring(args[2])) then
-                    return nil;
-                end
-            end    
-            if tostring(method) == "FireServer" and table.find(other_remotes, tostring(self)) then
-                return nil;
-            end                   
-            return namecall(self,...)            
-        end        
-        wait(.5)
-        setreadonly(game_mt, true)
-    end)   
-    bypassed = success
-end
+loadstring(game:HttpGet('https://raw.githubusercontent.com/HELLLO1073/Roblox-scripts-2.0/main/Games/CATASTROPHIA/bypass.lua'))();
+Library:Notify('Bypasser')
 
 local Fonts = {};
 for Font, _ in next, Drawing.Fonts do
-	table.insert(Fonts, Font);
+  table.insert(Fonts, Font);
 end;
 
 local MainWind = Library:CreateWindow('Cata testing V.1.0: H3');
@@ -814,7 +758,5 @@ game:GetService("RunService").RenderStepped:Connect(function()
     end
 end)
 
-bypasser()
-Library:Notify('Bypassed: '..tostring(bypassed))
 wait(1)
 Library:Notify('Loaded UI!');

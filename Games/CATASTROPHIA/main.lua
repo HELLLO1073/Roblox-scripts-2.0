@@ -8,6 +8,7 @@ local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 local Mouse = LocalPlayer:GetMouse()
 local Camera = workspace.CurrentCamera
+local uis = game:GetService("UserInputService")
 
 local Loot = game:GetService("Workspace"):WaitForChild("Loot")
 local animals = game:GetService("Workspace"):WaitForChild("Animals")
@@ -17,7 +18,7 @@ local Monuments = game:GetService("Workspace").Monuments
 local oldWells = Monuments:WaitForChild("OldWells")
 
 loadstring(game:HttpGet('https://raw.githubusercontent.com/HELLLO1073/Roblox-scripts-2.0/main/Games/CATASTROPHIA/bypass.lua'))();
-Library:Notify('Bypasser')
+Library:Notify('Loading bypasser V.2')
 
 local Fonts = {};
 for Font, _ in next, Drawing.Fonts do
@@ -38,6 +39,48 @@ lplayer1:AddToggle('MeleeAura', { Text = 'Melee Aura' });
 lplayer1:AddToggle('AutoPick', { Text = 'Auto PickUp' });
 lplayer1:AddToggle('AutoDrink', { Text = 'Auto Drink' });
 
+local playerTabbox2 = lPlayerWind:AddLeftTabbox();
+local lplayer2 = playerTabbox2:AddTab('Movement');
+
+lplayer2:AddToggle('Highjump', { Text = 'High Jump'}):OnChanged(function()
+    if Toggles.Highjump.Value then
+        LocalPlayer.Character.Humanoid.JumpPower = 46
+    else
+        LocalPlayer.Character.Humanoid.JumpPower = 25
+    end
+end);
+lplayer2:AddToggle('AutoSprint', { Text = 'Omni Sprint' });
+lplayer2:AddSlider('ASprintSpeed', { Text = 'Omni Speed', Default = 31, Min = 16, Max = 50, Rounding = 0 });
+lplayer2:AddLabel('SpeedBoost', { Text = 'Speed Bypass' }):AddKeyPicker('SpeedBypassKey', { Text = 'Speed Bypass', Default = 'X', Mode = 'Hold', Toggled = false });
+lplayer2:AddToggle('MaxSlope', { Text = 'Max Slope angle'}):OnChanged(function()
+    if not Toggles.MaxSlope.Value then
+        LocalPlayer.Character.Humanoid.MaxSlopeAngle = 45
+    end
+end);
+
+local speeding = false
+
+uis.InputBegan:connect(function(input)
+    if input.KeyCode == Enum.KeyCode[Options.SpeedBypassKey.Value] then
+        speeding = true
+        repeat wait(0.05)
+            if speeding then
+                for i = 0, 4, 1 do    
+                    if LocalPlayer.Character.Humanoid.MoveDirection.Magnitude > 0 then
+                        LocalPlayer.Character:TranslateBy(LocalPlayer.Character.Humanoid.MoveDirection)
+                    end        
+                end
+            end
+        until not speeding
+    end
+end)
+
+uis.InputEnded:connect(function(input)
+    if input.KeyCode == Enum.KeyCode[Options.SpeedBypassKey.Value] then        
+        speeding = false
+    end
+end)
+
 local playerBox = lPlayerWind:AddRightTabbox();
 local lPlayerMain = playerBox:AddTab('Player');
 
@@ -48,6 +91,30 @@ lPlayerMain:AddToggle('ThirdPerson', { Text = 'Third Person' }):OnChanged(functi
         LocalPlayer.CameraMode = Enum.CameraMode.Classic
     else
         LocalPlayer.CameraMode = Enum.CameraMode.LockFirstPerson
+    end
+end);
+lPlayerMain:AddToggle('SpinbotX', { Text = 'Spinbot'}):OnChanged(function()
+    if Toggles.SpinbotX.Value then
+        local spinSpeed = 20        
+
+        for i,v in pairs(LocalPlayer.Character.HumanoidRootPart:GetChildren()) do
+            if v.Name == "Spinning" then
+                v:Destroy()
+            end
+        end
+
+        local Spin = Instance.new("BodyAngularVelocity")
+        Spin.Name = "Spinning"
+        Spin.Parent = LocalPlayer.Character.HumanoidRootPart
+        Spin.MaxTorque = Vector3.new(0, math.huge, 0)
+        Spin.AngularVelocity = Vector3.new(0,spinSpeed,0)
+        
+    else
+        for i,v in pairs(LocalPlayer.Character.HumanoidRootPart:GetChildren()) do
+            if v.Name == "Spinning" then
+                v:Destroy()
+            end
+        end
     end
 end);
 
@@ -377,10 +444,10 @@ Toggles.GrassESP:OnChanged(function()
 end)
 
 Toggles.SilentFarm:OnChanged(function()
-    if Toggles.SilentFarm.Value then 
+    if Toggles.SilentFarm.Value and LocalPlayer and LocalPlayer.Character then 
         repeat wait(.2)
             for i,v in pairs(objectFolder:GetChildren()) do            
-                if LocalPlayer.Character:FindFirstChildWhichIsA("Tool") and LocalPlayer.Character:FindFirstChildWhichIsA("Tool"):FindFirstChild("AxeScriptUhel") then
+                if LocalPlayer.Character:FindFirstChildWhichIsA("Tool") then
         
                     local tTool = LocalPlayer.Character:FindFirstChildWhichIsA("Tool")
                     local lookVector = LocalPlayer.Character.HumanoidRootPart.CFrame.LookVector
@@ -391,6 +458,7 @@ Toggles.SilentFarm:OnChanged(function()
                     if tTool:FindFirstChild("AxeScriptUhel") then
                         currentTool = tTool
                     end                            
+
                     for _,p in pairs(v:GetChildren()) do
                         if p.Name == "Trunk" then
                             mainPart = p
@@ -407,15 +475,18 @@ Toggles.SilentFarm:OnChanged(function()
                             end
                         end
                     end 
+
                 end             
             end
         until not Toggles.SilentFarm.Value
     end
 end)
-Toggles.AutoPick:OnChanged(function()
+
+Toggles.AutoPick:OnChanged(function() --    game:GetService("ReplicatedStorage").Events.Sebrat:FireServer(ohInstance1)
     if Toggles.AutoPick.Value then 
-        repeat wait(.1)                       
-            local remote = game:GetService("ReplicatedStorage").Events.PickUp              
+        local pickUpRemote = "Sebrat"
+        repeat wait(.2)                       
+            local remote = game:GetService("ReplicatedStorage").Events[pickUpRemote]          
             for i,v in pairs(Loot:GetChildren()) do
                 local mainPart = v:FindFirstChild("Handle")
                 local dist = (mainPart.Position-LocalPlayer.Character.HumanoidRootPart.Position).Magnitude
@@ -427,7 +498,7 @@ Toggles.AutoPick:OnChanged(function()
                 if object.Name == "Grass" then
                     local dist = (object.Position-LocalPlayer.Character.HumanoidRootPart.Position).Magnitude
                     if dist < 9 then
-                        game:GetService("ReplicatedStorage").Events.PickUp:FireServer(object)
+                        remote:FireServer(object)
                     end
                 end
                 if object.Name == "Bush" then
@@ -435,7 +506,7 @@ Toggles.AutoPick:OnChanged(function()
                         if berry:IsA("Part") and berry.Name == "berry"  then
                             local dist = (berry.Position-LocalPlayer.Character.HumanoidRootPart.Position).Magnitude
                             if dist < 10 then
-                                game:GetService("ReplicatedStorage").Events.PickUp:FireServer(berry)
+                                remote:FireServer(berry)
                             end                            
                         end                        
                     end                    
@@ -446,7 +517,7 @@ Toggles.AutoPick:OnChanged(function()
 end)
 Toggles.AutoDrink:OnChanged(function()
     if Toggles.AutoDrink.Value then 
-        repeat wait(.1)       
+        repeat wait(1)       
             for i,v in pairs(oldWells:GetChildren()) do
                 if v.Name == "OldWell" and v:IsA("Model") then
                     local dist = (v.Kbelik.Voda.Position-LocalPlayer.Character.HumanoidRootPart.Position).Magnitude
@@ -461,12 +532,13 @@ end)
 Toggles.MeleeAura:OnChanged(function()
     if Toggles.MeleeAura.Value then
         repeat wait(.1)
-            for i,v in pairs(players:GetChildren()) do
-                if LPlayer.Character:FindFirstChildWhichIsA("Tool") and LPlayer.Character:FindFirstChildWhichIsA("Tool"):FindFirstChild("AxeScriptUhel") and v.Character and v.Character:FindFirstChild("Head") and v ~= LPlayer then
-                    local currentTool = LPlayer.Character:FindFirstChildWhichIsA("Tool")
-                    local localCframe = LPlayer.Character.HumanoidRootPart.CFrame
+            for i,v in pairs(Players:GetChildren()) do
+                if LocalPlayer.Character:FindFirstChildWhichIsA("Tool") and LocalPlayer.Character:FindFirstChildWhichIsA("Tool"):FindFirstChild("AxeScriptUhel") and v.Character and v.Character:FindFirstChild("Head") and v ~= LocalPlayer then
+                    local currentTool = LocalPlayer.Character:FindFirstChildWhichIsA("Tool")
+                    local lookVector = LocalPlayer.Character.HumanoidRootPart.CFrame.LookVector
+
                     local mainPart = v.Character.Head
-                    local dist = (mainPart.Position-LPlayer.Character.HumanoidRootPart.Position).Magnitude
+                    local dist = (mainPart.Position-LocalPlayer.Character.HumanoidRootPart.Position).Magnitude
                     if dist < 25 then
                         game:GetService("ReplicatedStorage").Events.Sekani:FireServer(currentTool, mainPart, lookVector, LocalPlayer.Character.Head.Size)
                     end                                                 
@@ -498,271 +570,295 @@ local boxWidth2 = 1.5
 
 game:GetService("RunService").RenderStepped:Connect(function()
     --// Player ESP
-    for i,v in pairs(Players:GetPlayers()) do
-        if v ~= LocalPlayer and v.Character and v.Character:FindFirstChild("Head") then
-            local dist = (v.Character:FindFirstChild("HumanoidRootPart").Position-LocalPlayer.Character.HumanoidRootPart.Position).Magnitude
-            local headPart = v.Character.Head
-            local boxPart = v.Character.HumanoidRootPart
-            local vector, onScreen = Camera:WorldToViewportPoint(headPart.Position)
-            local vector_2, onScreen2 = Camera:WorldToViewportPoint(boxPart.Position)
-            if Toggles.Nametags.Value and onScreen then                     
-                local nameTag = Drawing.new("Text")            
-                nameTag.Visible = true            
-                nameTag.Font = Drawing.Fonts[tostring(Options.SelectedFont.Value)]
-                nameTag.Center = true
-                nameTag.Outline = true
-                nameTag.Size = math.clamp(Options.FontSize.Value-(headPart.Position-game.Workspace.CurrentCamera.CFrame.Position).Magnitude,Options.FontSize.Value,83)
-                nameTag.Color = Options.name_color.Value
-                nameTag.Text = v.Name.." | "..math.round(dist)
-                nameTag.Position = Vector2.new(
-                    game.Workspace.CurrentCamera:WorldToViewportPoint(boxPart.CFrame.Position+boxPart.CFrame.UpVector*(3+(boxPart.Position-game.Workspace.CurrentCamera.CFrame.Position).Magnitude/25)).X,
-                    game.Workspace.CurrentCamera:WorldToViewportPoint(boxPart.CFrame.Position+boxPart.CFrame.UpVector*(3+(boxPart.Position-game.Workspace.CurrentCamera.CFrame.Position).Magnitude/Options.Nameoffset.Value)).Y)                     
-                coroutine.wrap(function()                    
-                    game.RunService.RenderStepped:Wait()
-                    nameTag:Remove()
-                end)()
-            end
-            if Toggles.cur_weapon.Value and onScreen2 then
-                local wepTag = Drawing.new("Text")            
-                wepTag.Visible = true            
-                wepTag.Font = Drawing.Fonts[tostring(Options.SelectedFont.Value)]
-                wepTag.Center = true
-                wepTag.Outline = true
-                wepTag.Size = math.clamp(Options.FontSize.Value-(boxPart.Position-game.Workspace.CurrentCamera.CFrame.Position).Magnitude,Options.FontSize.Value,83)
-                wepTag.Color = Options.cw_color.Value
-                if v.Character:FindFirstChildWhichIsA("Tool") and v.Character:FindFirstChildWhichIsA("Tool").Stack then    
-                    wepTag.Text = v.Character:FindFirstChildWhichIsA("Tool").Name.." [Stack: "..v.Character:FindFirstChildWhichIsA("Tool").Stack.Value.."]"
-                else
-                    wepTag.Text = "none"
-                end
-                wepTag.Position = Vector2.new(
-                    game.Workspace.CurrentCamera:WorldToViewportPoint(boxPart.CFrame.Position+boxPart.CFrame.UpVector*(3+(boxPart.Position-game.Workspace.CurrentCamera.CFrame.Position).Magnitude/25)).X,
-                    game.Workspace.CurrentCamera:WorldToViewportPoint(boxPart.CFrame.Position+boxPart.CFrame.UpVector*(3+(boxPart.Position-game.Workspace.CurrentCamera.CFrame.Position).Magnitude/Options.Wepoffset.Value)).Y)  
- 
-                coroutine.wrap(function()                    
-                    game.RunService.RenderStepped:Wait()
-                    wepTag:Remove()
-                end)()
-            end
-            if Toggles.Nametags.Value and onScreen then                     
-                local nameTag = Drawing.new("Text")            
-                nameTag.Visible = true            
-                nameTag.Font = Drawing.Fonts[tostring(Options.SelectedFont.Value)]
-                nameTag.Center = true
-                nameTag.Outline = true
-                nameTag.Size = math.clamp(Options.FontSize.Value-(headPart.Position-game.Workspace.CurrentCamera.CFrame.Position).Magnitude,Options.FontSize.Value,83)
-                nameTag.Color = Options.name_color.Value
-                nameTag.Text = v.Name.." | "..math.round(dist)
-                nameTag.Position = Vector2.new(
-                    game.Workspace.CurrentCamera:WorldToViewportPoint(boxPart.CFrame.Position+boxPart.CFrame.UpVector*(3+(boxPart.Position-game.Workspace.CurrentCamera.CFrame.Position).Magnitude/25)).X,
-                    game.Workspace.CurrentCamera:WorldToViewportPoint(boxPart.CFrame.Position+boxPart.CFrame.UpVector*(3+(boxPart.Position-game.Workspace.CurrentCamera.CFrame.Position).Magnitude/Options.Nameoffset.Value)).Y)                     
-                coroutine.wrap(function()                    
-                    game.RunService.RenderStepped:Wait()
-                    nameTag:Remove()
-                end)()
-            end
-            if Toggles.Boxes.Value and onScreen2 then
-                local boxPart = v.Character.HumanoidRootPart                            
-                --// Outline box          
-                local boxOutline = Drawing.new("Quad")       
-                boxOutline.Visible = true
-                boxOutline.Color = Color3.new(0, 0, 0)
-                boxOutline.Thickness = 2.5
-                boxOutline.Transparency = 1
-                boxOutline.Filled = false
-                boxOutline.ZIndex = 1     
-                boxOutline.PointA = Vector2.new(
-                    Camera:WorldToViewportPoint(boxPart.CFrame.Position + boxPart.CFrame.RightVector *-boxWidth2 + boxPart.CFrame.UpVector * boxheight1).X,
-                    Camera:WorldToViewportPoint(boxPart.CFrame.Position + boxPart.CFrame.RightVector *-boxWidth2 + boxPart.CFrame.UpVector * boxheight1).Y)  
-                boxOutline.PointB = Vector2.new(
-                    Camera:WorldToViewportPoint(boxPart.CFrame.Position + boxPart.CFrame.RightVector * boxWidth1 + boxPart.CFrame.UpVector * boxheight1).X,
-                    Camera:WorldToViewportPoint(boxPart.CFrame.Position + boxPart.CFrame.RightVector * boxWidth1 + boxPart.CFrame.UpVector * boxheight1).Y)  
-                boxOutline.PointC = Vector2.new(
-                    Camera:WorldToViewportPoint(boxPart.CFrame.Position + boxPart.CFrame.RightVector * boxWidth1 + boxPart.CFrame.UpVector * -boxheight2).X,
-                    Camera:WorldToViewportPoint(boxPart.CFrame.Position + boxPart.CFrame.RightVector * boxWidth1 + boxPart.CFrame.UpVector * -boxheight2).Y)  
-                boxOutline.PointD = Vector2.new(
-                    Camera:WorldToViewportPoint(boxPart.CFrame.Position + boxPart.CFrame.RightVector *-boxWidth2 + boxPart.CFrame.UpVector * -boxheight2).X,
-                    Camera:WorldToViewportPoint(boxPart.CFrame.Position + boxPart.CFrame.RightVector *-boxWidth2 + boxPart.CFrame.UpVector * -boxheight2).Y)
- 
-                --// Main box                    
-                local box = Drawing.new("Quad")       
-                box.Visible = true
-                box.Color = Options.box_color.Value
-                box.Thickness = 1
-                box.Transparency = 1
-                box.Filled = false
-                box.ZIndex = 2                  
-                box.PointA = Vector2.new(
-                    Camera:WorldToViewportPoint(boxPart.CFrame.Position + boxPart.CFrame.RightVector *-boxWidth2 + boxPart.CFrame.UpVector * boxheight1).X,
-                    Camera:WorldToViewportPoint(boxPart.CFrame.Position + boxPart.CFrame.RightVector *-boxWidth2 + boxPart.CFrame.UpVector * boxheight1).Y)  
-                box.PointB = Vector2.new(
-                    Camera:WorldToViewportPoint(boxPart.CFrame.Position + boxPart.CFrame.RightVector * boxWidth1 + boxPart.CFrame.UpVector * boxheight1).X,
-                    Camera:WorldToViewportPoint(boxPart.CFrame.Position + boxPart.CFrame.RightVector * boxWidth1 + boxPart.CFrame.UpVector * boxheight1).Y)  
-                box.PointC = Vector2.new(
-                    Camera:WorldToViewportPoint(boxPart.CFrame.Position + boxPart.CFrame.RightVector * boxWidth1 + boxPart.CFrame.UpVector * -boxheight2).X,
-                    Camera:WorldToViewportPoint(boxPart.CFrame.Position + boxPart.CFrame.RightVector * boxWidth1 + boxPart.CFrame.UpVector * -boxheight2).Y)  
-                box.PointD = Vector2.new(
-                    Camera:WorldToViewportPoint(boxPart.CFrame.Position + boxPart.CFrame.RightVector *-boxWidth2 + boxPart.CFrame.UpVector * -boxheight2).X,
-                    Camera:WorldToViewportPoint(boxPart.CFrame.Position + boxPart.CFrame.RightVector *-boxWidth2 + boxPart.CFrame.UpVector * -boxheight2).Y)             
-                coroutine.wrap(function()
-                    game.RunService.RenderStepped:wait()
-                    box:Remove()
-                    boxOutline:Remove()
-                end)() 
-            end
-            if Toggles.Healthbars.Value and onScreen then
-                local healthnum=v.Character.Humanoid.Health
-                local maxhealth=v.Character.Humanoid.MaxHealth
-                local c=Drawing.new("Quad")
-                c.Visible=true
-                c.Color = Color3.fromRGB(0,0,0)
-                c.Thickness=1
-                c.Transparency=1
-                c.Filled=false
-                c.PointA=Vector2.new(
-                    game.Workspace.CurrentCamera:WorldToViewportPoint(boxPart.CFrame.Position+boxPart.CFrame.RightVector*2.5+boxPart.CFrame.UpVector*2.5).X,
-                    game.Workspace.CurrentCamera:WorldToViewportPoint(boxPart.CFrame.Position+boxPart.CFrame.RightVector*2.5+boxPart.CFrame.UpVector*2.5).Y)
-                c.PointB=Vector2.new(
-                    game.Workspace.CurrentCamera:WorldToViewportPoint(boxPart.CFrame.Position+boxPart.CFrame.RightVector*2+boxPart.CFrame.UpVector*2.5).X,
-                    game.Workspace.CurrentCamera:WorldToViewportPoint(boxPart.CFrame.Position+boxPart.CFrame.RightVector*2+boxPart.CFrame.UpVector*2.5).Y)
-                c.PointC=Vector2.new(
-                    game.Workspace.CurrentCamera:WorldToViewportPoint(boxPart.CFrame.Position+boxPart.CFrame.RightVector*2+boxPart.CFrame.UpVector*-boxheight2).X,
-                    game.Workspace.CurrentCamera:WorldToViewportPoint(boxPart.CFrame.Position+boxPart.CFrame.RightVector*2+boxPart.CFrame.UpVector*-boxheight2).Y)
-                c.PointD=Vector2.new(
-                    game.Workspace.CurrentCamera:WorldToViewportPoint(boxPart.CFrame.Position+boxPart.CFrame.RightVector*2.5+boxPart.CFrame.UpVector*-boxheight2).X,
-                    game.Workspace.CurrentCamera:WorldToViewportPoint(boxPart.CFrame.Position+boxPart.CFrame.RightVector*2.5+boxPart.CFrame.UpVector*-boxheight2).Y)
-                coroutine.wrap(function()
-                game.RunService.RenderStepped:Wait()
-                    c:Remove()
-                end)()
-                local e=Drawing.new("Quad")
-                e.Visible=true
-                e.Color=Color3.new(1,0,0)
-                e.Thickness=1
-                e.Transparency=1
-                e.Filled=true
-                e.PointA=Vector2.new(
-                game.Workspace.CurrentCamera:WorldToViewportPoint(boxPart.CFrame.Position+boxPart.CFrame.RightVector*2.5+boxPart.CFrame.UpVector*2.5).X,
-                    game.Workspace.CurrentCamera:WorldToViewportPoint(boxPart.CFrame.Position+boxPart.CFrame.RightVector*2.5+boxPart.CFrame.UpVector*2.5).Y)
-                e.PointB=Vector2.new(
-                    game.Workspace.CurrentCamera:WorldToViewportPoint(boxPart.CFrame.Position+boxPart.CFrame.RightVector*2+boxPart.CFrame.UpVector*2.5).X,
-                    game.Workspace.CurrentCamera:WorldToViewportPoint(boxPart.CFrame.Position+boxPart.CFrame.RightVector*2+boxPart.CFrame.UpVector*2.5).Y)
-                e.PointC=Vector2.new(
-                    game.Workspace.CurrentCamera:WorldToViewportPoint(boxPart.CFrame.Position+boxPart.CFrame.RightVector*2+boxPart.CFrame.UpVector*-boxheight2).X,
-                    game.Workspace.CurrentCamera:WorldToViewportPoint(boxPart.CFrame.Position+boxPart.CFrame.RightVector*2+boxPart.CFrame.UpVector*-boxheight2).Y)
-                e.PointD=Vector2.new(
-                    game.Workspace.CurrentCamera:WorldToViewportPoint(boxPart.CFrame.Position+boxPart.CFrame.RightVector*2.5+boxPart.CFrame.UpVector*-boxheight2).X,
-                    game.Workspace.CurrentCamera:WorldToViewportPoint(boxPart.CFrame.Position+boxPart.CFrame.RightVector*2.5+boxPart.CFrame.UpVector*-boxheight2).Y)
-                coroutine.wrap(function()
-                    game.RunService.RenderStepped:Wait()
-                    e:Remove()
-                end)()
-                local d = Drawing.new("Quad")
-                d.Visible=true
-                d.Color = Options.health_color.Value
-                d.Thickness=1
-                d.Transparency=1
-                d.Filled=true
-                d.PointA=Vector2.new(
-                    game.Workspace.CurrentCamera:WorldToViewportPoint(boxPart.CFrame.Position+boxPart.CFrame.RightVector*2.5+boxPart.CFrame.UpVector*(-boxheight2+healthnum/(maxhealth/5))).X,
-                    game.Workspace.CurrentCamera:WorldToViewportPoint(boxPart.CFrame.Position+boxPart.CFrame.RightVector*2.5+boxPart.CFrame.UpVector*(-boxheight2+healthnum/(maxhealth/5))).Y)
-                d.PointB=Vector2.new(
-                    game.Workspace.CurrentCamera:WorldToViewportPoint(boxPart.CFrame.Position+boxPart.CFrame.RightVector*2+boxPart.CFrame.UpVector*(-boxheight2+healthnum/(maxhealth/5))).X,
-                    game.Workspace.CurrentCamera:WorldToViewportPoint(boxPart.CFrame.Position+boxPart.CFrame.RightVector*2+boxPart.CFrame.UpVector*(-boxheight2+healthnum/(maxhealth/5))).Y)
-                d.PointC=c.PointC
-                d.PointD=c.PointD
-                coroutine.wrap(function()
-                    game.RunService.RenderStepped:Wait()
-                    d:Remove()
-                end)()
-            end
-        end
-    end  
-    --// Item ESP
-    if Toggles.ItemESP.Value then
-        for i,v in pairs(Loot:GetChildren()) do
-            if v:IsA("Model") and v:FindFirstChild("Handle") then
-                local mainPart = v:FindFirstChild("Handle")
-                local partDist = (mainPart.Position-LocalPlayer.Character.HumanoidRootPart.Position).Magnitude
-                local vec, onScreen = game.Workspace.CurrentCamera:WorldToViewportPoint(mainPart.Position)
-                if onScreen and partDist < Options.idistance.Value and partDist > 5 then
-                    local txt = Drawing.new("Text")
-                    txt.Text = mainPart.Parent.Name.." | "..tostring(math.round(partDist))
-                    txt.Outline = true 
-                    txt.Visible = true 
-                    txt.Center = true                                   
-                    txt.Font = 1
-                    txt.Size = 15                    
-                    txt.Color = Options.is_color.Value
-                    txt.Position = Vector2.new(vec.X,vec.Y - 10)
-                    coroutine.wrap(function()
-                        game.RunService.RenderStepped:Wait()
-                        txt:Remove()
-                    end)()
-                end
-            end
-        end
-    end
-    --// Animals 
-    if Toggles.AnimalESP.Value then
-        for _,animal in pairs(animals:GetChildren()) do
-            if animal:IsA("Model") and animal:FindFirstChild("Torso") then
-                local mainPart = animal.Torso
-                local dist = (mainPart.Position-LocalPlayer.Character.HumanoidRootPart.Position).Magnitude
-                local vec, onScreen = Camera:WorldToViewportPoint(mainPart.Position)
-                if onScreen then
-                    local nameTag = Drawing.new("Text")
-                    nameTag.Visible = true
-                    nameTag.Font = 1
-                    nameTag.Outline = true
+    if LocalPlayer and LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+        for i,v in pairs(Players:GetPlayers()) do
+            if v ~= LocalPlayer and v.Character and v.Character:FindFirstChild("Head") then
+                local dist = (v.Character:FindFirstChild("HumanoidRootPart").Position-LocalPlayer.Character.HumanoidRootPart.Position).Magnitude
+                local headPart = v.Character.Head
+                local boxPart = v.Character.HumanoidRootPart
+                local vector, onScreen = Camera:WorldToViewportPoint(headPart.Position)
+                local vector_2, onScreen2 = Camera:WorldToViewportPoint(boxPart.Position)
+                if Toggles.Nametags.Value and onScreen then                     
+                    local nameTag = Drawing.new("Text")            
+                    nameTag.Visible = true            
+                    nameTag.Font = Drawing.Fonts[tostring(Options.SelectedFont.Value)]
                     nameTag.Center = true
-                    nameTag.Size = math.clamp(14-(mainPart.Position-game.Workspace.CurrentCamera.CFrame.Position).Magnitude,14,83)
-                    nameTag.Color = Options.as_color.Value 
-                    nameTag.Text = animal.Name.." | "..math.round(dist)
-                    nameTag.Position = Vector2.new(vec.X,vec.Y)
-                    coroutine.wrap(function()
+                    nameTag.Outline = true
+                    nameTag.Size = math.clamp(Options.FontSize.Value-(headPart.Position-game.Workspace.CurrentCamera.CFrame.Position).Magnitude,Options.FontSize.Value,83)
+                    nameTag.Color = Options.name_color.Value
+                    nameTag.Text = v.Name.." | "..math.round(dist)
+                    nameTag.Position = Vector2.new(
+                        game.Workspace.CurrentCamera:WorldToViewportPoint(boxPart.CFrame.Position+boxPart.CFrame.UpVector*(3+(boxPart.Position-game.Workspace.CurrentCamera.CFrame.Position).Magnitude/25)).X,
+                        game.Workspace.CurrentCamera:WorldToViewportPoint(boxPart.CFrame.Position+boxPart.CFrame.UpVector*(3+(boxPart.Position-game.Workspace.CurrentCamera.CFrame.Position).Magnitude/Options.Nameoffset.Value)).Y)                     
+                    coroutine.wrap(function()                    
                         game.RunService.RenderStepped:Wait()
                         nameTag:Remove()
                     end)()
                 end
-            end
-        end
-    end
-    --// Well ESP
-    if Toggles.WellESP.Value then
-        for i,v in pairs(oldWells:GetChildren()) do
-            if v.Name == "OldWell" and v:IsA("Model") then
-                local targetPart;
-                for _,p in pairs(v:GetChildren()) do
-                    if p.Name == "Part" and p.Color == Color3.fromRGB(110, 153, 202) then
-                        targetPart = p
+                if Toggles.cur_weapon.Value and onScreen2 then
+                    local wepTag = Drawing.new("Text")            
+                    wepTag.Visible = true            
+                    wepTag.Font = Drawing.Fonts[tostring(Options.SelectedFont.Value)]
+                    wepTag.Center = true
+                    wepTag.Outline = true
+                    wepTag.Size = math.clamp(Options.FontSize.Value-(boxPart.Position-game.Workspace.CurrentCamera.CFrame.Position).Magnitude,Options.FontSize.Value,83)
+                    wepTag.Color = Options.cw_color.Value
+                    if v.Character:FindFirstChildWhichIsA("Tool") and v.Character:FindFirstChildWhichIsA("Tool").Stack then    
+                        wepTag.Text = v.Character:FindFirstChildWhichIsA("Tool").Name.." [Stack: "..v.Character:FindFirstChildWhichIsA("Tool").Stack.Value.."]"
+                    else
+                        wepTag.Text = "none"
                     end
+                    wepTag.Position = Vector2.new(
+                        game.Workspace.CurrentCamera:WorldToViewportPoint(boxPart.CFrame.Position+boxPart.CFrame.UpVector*(3+(boxPart.Position-game.Workspace.CurrentCamera.CFrame.Position).Magnitude/25)).X,
+                        game.Workspace.CurrentCamera:WorldToViewportPoint(boxPart.CFrame.Position+boxPart.CFrame.UpVector*(3+(boxPart.Position-game.Workspace.CurrentCamera.CFrame.Position).Magnitude/Options.Wepoffset.Value)).Y)  
+    
+                    coroutine.wrap(function()                    
+                        game.RunService.RenderStepped:Wait()
+                        wepTag:Remove()
+                    end)()
                 end
-                local partDist = (targetPart.Position-LocalPlayer.Character.HumanoidRootPart.Position).Magnitude
-                local vec, onScreen = game.Workspace.CurrentCamera:WorldToViewportPoint(targetPart.Position)
-                if onScreen then
-                    local txt = Drawing.new("Text")
-                    txt.Text = targetPart.Parent.Name.." | "..tostring(math.round(partDist))
-                    txt.Outline = true 
-                    txt.Visible = true 
-                    txt.Center = true                                   
-                    txt.Font = 1
-                    txt.Size = 15                    
-                    txt.Color = Color3.fromRGB(0, 132, 255)
-                    txt.Position = Vector2.new(vec.X,vec.Y - 10)
+                if Toggles.Nametags.Value and onScreen then                     
+                    local nameTag = Drawing.new("Text")            
+                    nameTag.Visible = true            
+                    nameTag.Font = Drawing.Fonts[tostring(Options.SelectedFont.Value)]
+                    nameTag.Center = true
+                    nameTag.Outline = true
+                    nameTag.Size = math.clamp(Options.FontSize.Value-(headPart.Position-game.Workspace.CurrentCamera.CFrame.Position).Magnitude,Options.FontSize.Value,83)
+                    nameTag.Color = Options.name_color.Value
+                    nameTag.Text = v.Name.." | "..math.round(dist)
+                    nameTag.Position = Vector2.new(
+                        game.Workspace.CurrentCamera:WorldToViewportPoint(boxPart.CFrame.Position+boxPart.CFrame.UpVector*(3+(boxPart.Position-game.Workspace.CurrentCamera.CFrame.Position).Magnitude/25)).X,
+                        game.Workspace.CurrentCamera:WorldToViewportPoint(boxPart.CFrame.Position+boxPart.CFrame.UpVector*(3+(boxPart.Position-game.Workspace.CurrentCamera.CFrame.Position).Magnitude/Options.Nameoffset.Value)).Y)                     
+                    coroutine.wrap(function()                    
+                        game.RunService.RenderStepped:Wait()
+                        nameTag:Remove()
+                    end)()
+                end
+                if Toggles.Boxes.Value and onScreen2 then
+                    local boxPart = v.Character.HumanoidRootPart                            
+                    --// Outline box          
+                    local boxOutline = Drawing.new("Quad")       
+                    boxOutline.Visible = true
+                    boxOutline.Color = Color3.new(0, 0, 0)
+                    boxOutline.Thickness = 2.5
+                    boxOutline.Transparency = 1
+                    boxOutline.Filled = false
+                    boxOutline.ZIndex = 1     
+                    boxOutline.PointA = Vector2.new(
+                        Camera:WorldToViewportPoint(boxPart.CFrame.Position + boxPart.CFrame.RightVector *-boxWidth2 + boxPart.CFrame.UpVector * boxheight1).X,
+                        Camera:WorldToViewportPoint(boxPart.CFrame.Position + boxPart.CFrame.RightVector *-boxWidth2 + boxPart.CFrame.UpVector * boxheight1).Y)  
+                    boxOutline.PointB = Vector2.new(
+                        Camera:WorldToViewportPoint(boxPart.CFrame.Position + boxPart.CFrame.RightVector * boxWidth1 + boxPart.CFrame.UpVector * boxheight1).X,
+                        Camera:WorldToViewportPoint(boxPart.CFrame.Position + boxPart.CFrame.RightVector * boxWidth1 + boxPart.CFrame.UpVector * boxheight1).Y)  
+                    boxOutline.PointC = Vector2.new(
+                        Camera:WorldToViewportPoint(boxPart.CFrame.Position + boxPart.CFrame.RightVector * boxWidth1 + boxPart.CFrame.UpVector * -boxheight2).X,
+                        Camera:WorldToViewportPoint(boxPart.CFrame.Position + boxPart.CFrame.RightVector * boxWidth1 + boxPart.CFrame.UpVector * -boxheight2).Y)  
+                    boxOutline.PointD = Vector2.new(
+                        Camera:WorldToViewportPoint(boxPart.CFrame.Position + boxPart.CFrame.RightVector *-boxWidth2 + boxPart.CFrame.UpVector * -boxheight2).X,
+                        Camera:WorldToViewportPoint(boxPart.CFrame.Position + boxPart.CFrame.RightVector *-boxWidth2 + boxPart.CFrame.UpVector * -boxheight2).Y)
+    
+                    --// Main box                    
+                    local box = Drawing.new("Quad")       
+                    box.Visible = true
+                    box.Color = Options.box_color.Value
+                    box.Thickness = 1
+                    box.Transparency = 1
+                    box.Filled = false
+                    box.ZIndex = 2                  
+                    box.PointA = Vector2.new(
+                        Camera:WorldToViewportPoint(boxPart.CFrame.Position + boxPart.CFrame.RightVector *-boxWidth2 + boxPart.CFrame.UpVector * boxheight1).X,
+                        Camera:WorldToViewportPoint(boxPart.CFrame.Position + boxPart.CFrame.RightVector *-boxWidth2 + boxPart.CFrame.UpVector * boxheight1).Y)  
+                    box.PointB = Vector2.new(
+                        Camera:WorldToViewportPoint(boxPart.CFrame.Position + boxPart.CFrame.RightVector * boxWidth1 + boxPart.CFrame.UpVector * boxheight1).X,
+                        Camera:WorldToViewportPoint(boxPart.CFrame.Position + boxPart.CFrame.RightVector * boxWidth1 + boxPart.CFrame.UpVector * boxheight1).Y)  
+                    box.PointC = Vector2.new(
+                        Camera:WorldToViewportPoint(boxPart.CFrame.Position + boxPart.CFrame.RightVector * boxWidth1 + boxPart.CFrame.UpVector * -boxheight2).X,
+                        Camera:WorldToViewportPoint(boxPart.CFrame.Position + boxPart.CFrame.RightVector * boxWidth1 + boxPart.CFrame.UpVector * -boxheight2).Y)  
+                    box.PointD = Vector2.new(
+                        Camera:WorldToViewportPoint(boxPart.CFrame.Position + boxPart.CFrame.RightVector *-boxWidth2 + boxPart.CFrame.UpVector * -boxheight2).X,
+                        Camera:WorldToViewportPoint(boxPart.CFrame.Position + boxPart.CFrame.RightVector *-boxWidth2 + boxPart.CFrame.UpVector * -boxheight2).Y)             
+                    coroutine.wrap(function()
+                        game.RunService.RenderStepped:wait()
+                        box:Remove()
+                        boxOutline:Remove()
+                    end)() 
+                end
+                if Toggles.Healthbars.Value and onScreen then
+                    local healthnum=v.Character.Humanoid.Health
+                    local maxhealth=v.Character.Humanoid.MaxHealth
+                    local c=Drawing.new("Quad")
+                    c.Visible=true
+                    c.Color = Color3.fromRGB(0,0,0)
+                    c.Thickness=1
+                    c.Transparency=1
+                    c.Filled=false
+                    c.PointA=Vector2.new(
+                        game.Workspace.CurrentCamera:WorldToViewportPoint(boxPart.CFrame.Position+boxPart.CFrame.RightVector*2.5+boxPart.CFrame.UpVector*2.5).X,
+                        game.Workspace.CurrentCamera:WorldToViewportPoint(boxPart.CFrame.Position+boxPart.CFrame.RightVector*2.5+boxPart.CFrame.UpVector*2.5).Y)
+                    c.PointB=Vector2.new(
+                        game.Workspace.CurrentCamera:WorldToViewportPoint(boxPart.CFrame.Position+boxPart.CFrame.RightVector*2+boxPart.CFrame.UpVector*2.5).X,
+                        game.Workspace.CurrentCamera:WorldToViewportPoint(boxPart.CFrame.Position+boxPart.CFrame.RightVector*2+boxPart.CFrame.UpVector*2.5).Y)
+                    c.PointC=Vector2.new(
+                        game.Workspace.CurrentCamera:WorldToViewportPoint(boxPart.CFrame.Position+boxPart.CFrame.RightVector*2+boxPart.CFrame.UpVector*-boxheight2).X,
+                        game.Workspace.CurrentCamera:WorldToViewportPoint(boxPart.CFrame.Position+boxPart.CFrame.RightVector*2+boxPart.CFrame.UpVector*-boxheight2).Y)
+                    c.PointD=Vector2.new(
+                        game.Workspace.CurrentCamera:WorldToViewportPoint(boxPart.CFrame.Position+boxPart.CFrame.RightVector*2.5+boxPart.CFrame.UpVector*-boxheight2).X,
+                        game.Workspace.CurrentCamera:WorldToViewportPoint(boxPart.CFrame.Position+boxPart.CFrame.RightVector*2.5+boxPart.CFrame.UpVector*-boxheight2).Y)
+                    coroutine.wrap(function()
+                    game.RunService.RenderStepped:Wait()
+                        c:Remove()
+                    end)()
+                    local e=Drawing.new("Quad")
+                    e.Visible=true
+                    e.Color=Color3.new(1,0,0)
+                    e.Thickness=1
+                    e.Transparency=1
+                    e.Filled=true
+                    e.PointA=Vector2.new(
+                    game.Workspace.CurrentCamera:WorldToViewportPoint(boxPart.CFrame.Position+boxPart.CFrame.RightVector*2.5+boxPart.CFrame.UpVector*2.5).X,
+                        game.Workspace.CurrentCamera:WorldToViewportPoint(boxPart.CFrame.Position+boxPart.CFrame.RightVector*2.5+boxPart.CFrame.UpVector*2.5).Y)
+                    e.PointB=Vector2.new(
+                        game.Workspace.CurrentCamera:WorldToViewportPoint(boxPart.CFrame.Position+boxPart.CFrame.RightVector*2+boxPart.CFrame.UpVector*2.5).X,
+                        game.Workspace.CurrentCamera:WorldToViewportPoint(boxPart.CFrame.Position+boxPart.CFrame.RightVector*2+boxPart.CFrame.UpVector*2.5).Y)
+                    e.PointC=Vector2.new(
+                        game.Workspace.CurrentCamera:WorldToViewportPoint(boxPart.CFrame.Position+boxPart.CFrame.RightVector*2+boxPart.CFrame.UpVector*-boxheight2).X,
+                        game.Workspace.CurrentCamera:WorldToViewportPoint(boxPart.CFrame.Position+boxPart.CFrame.RightVector*2+boxPart.CFrame.UpVector*-boxheight2).Y)
+                    e.PointD=Vector2.new(
+                        game.Workspace.CurrentCamera:WorldToViewportPoint(boxPart.CFrame.Position+boxPart.CFrame.RightVector*2.5+boxPart.CFrame.UpVector*-boxheight2).X,
+                        game.Workspace.CurrentCamera:WorldToViewportPoint(boxPart.CFrame.Position+boxPart.CFrame.RightVector*2.5+boxPart.CFrame.UpVector*-boxheight2).Y)
                     coroutine.wrap(function()
                         game.RunService.RenderStepped:Wait()
-                        txt:Remove()
+                        e:Remove()
+                    end)()
+                    local d = Drawing.new("Quad")
+                    d.Visible=true
+                    d.Color = Options.health_color.Value
+                    d.Thickness=1
+                    d.Transparency=1
+                    d.Filled=true
+                    d.PointA=Vector2.new(
+                        game.Workspace.CurrentCamera:WorldToViewportPoint(boxPart.CFrame.Position+boxPart.CFrame.RightVector*2.5+boxPart.CFrame.UpVector*(-boxheight2+healthnum/(maxhealth/5))).X,
+                        game.Workspace.CurrentCamera:WorldToViewportPoint(boxPart.CFrame.Position+boxPart.CFrame.RightVector*2.5+boxPart.CFrame.UpVector*(-boxheight2+healthnum/(maxhealth/5))).Y)
+                    d.PointB=Vector2.new(
+                        game.Workspace.CurrentCamera:WorldToViewportPoint(boxPart.CFrame.Position+boxPart.CFrame.RightVector*2+boxPart.CFrame.UpVector*(-boxheight2+healthnum/(maxhealth/5))).X,
+                        game.Workspace.CurrentCamera:WorldToViewportPoint(boxPart.CFrame.Position+boxPart.CFrame.RightVector*2+boxPart.CFrame.UpVector*(-boxheight2+healthnum/(maxhealth/5))).Y)
+                    d.PointC=c.PointC
+                    d.PointD=c.PointD
+                    coroutine.wrap(function()
+                        game.RunService.RenderStepped:Wait()
+                        d:Remove()
                     end)()
                 end
             end
+        end  
+        --// Item ESP
+        if Toggles.ItemESP.Value then
+            for i,v in pairs(Loot:GetChildren()) do
+                if v:IsA("Model") and v:FindFirstChild("Handle") then
+                    local mainPart = v:FindFirstChild("Handle")
+                    local partDist = (mainPart.Position-LocalPlayer.Character.HumanoidRootPart.Position).Magnitude
+                    local vec, onScreen = game.Workspace.CurrentCamera:WorldToViewportPoint(mainPart.Position)
+                    if onScreen and partDist < Options.idistance.Value and partDist > 5 then
+                        local txt = Drawing.new("Text")
+                        txt.Text = mainPart.Parent.Name.." | "..tostring(math.round(partDist))
+                        txt.Outline = true 
+                        txt.Visible = true 
+                        txt.Center = true                                   
+                        txt.Font = 1
+                        txt.Size = 15                    
+                        txt.Color = Options.is_color.Value
+                        txt.Position = Vector2.new(vec.X,vec.Y - 10)
+                        coroutine.wrap(function()
+                            game.RunService.RenderStepped:Wait()
+                            txt:Remove()
+                        end)()
+                    end
+                end
+            end
         end
-    end
-    if ligtingOveride then
-        lighting.Ambient = Options.lAmbient.Value
-        lighting.OutdoorAmbient = Options.lOutDoorAmbient.Value
+        --// Animals 
+        if Toggles.AnimalESP.Value then
+            for _,animal in pairs(animals:GetChildren()) do
+                if animal:IsA("Model") and animal:FindFirstChild("Torso") then
+                    local mainPart = animal.Torso
+                    local dist = (mainPart.Position-LocalPlayer.Character.HumanoidRootPart.Position).Magnitude
+                    local vec, onScreen = Camera:WorldToViewportPoint(mainPart.Position)
+                    if onScreen then
+                        local nameTag = Drawing.new("Text")
+                        nameTag.Visible = true
+                        nameTag.Font = 1
+                        nameTag.Outline = true
+                        nameTag.Center = true
+                        nameTag.Size = math.clamp(14-(mainPart.Position-game.Workspace.CurrentCamera.CFrame.Position).Magnitude,14,83)
+                        nameTag.Color = Options.as_color.Value 
+                        nameTag.Text = animal.Name.." | "..math.round(dist)
+                        nameTag.Position = Vector2.new(vec.X,vec.Y)
+                        coroutine.wrap(function()
+                            game.RunService.RenderStepped:Wait()
+                            nameTag:Remove()
+                        end)()
+                    end
+                end
+            end
+        end
+        --// Well ESP
+        if Toggles.WellESP.Value then
+            for i,v in pairs(oldWells:GetChildren()) do
+                if v.Name == "OldWell" and v:IsA("Model") then
+                    local targetPart;
+                    for _,p in pairs(v:GetChildren()) do
+                        if p.Name == "Part" and p.Color == Color3.fromRGB(110, 153, 202) then
+                            targetPart = p
+                        end
+                    end
+                    local partDist = (targetPart.Position-LocalPlayer.Character.HumanoidRootPart.Position).Magnitude
+                    local vec, onScreen = game.Workspace.CurrentCamera:WorldToViewportPoint(targetPart.Position)
+                    if onScreen then
+                        local txt = Drawing.new("Text")
+                        txt.Text = targetPart.Parent.Name.." | "..tostring(math.round(partDist))
+                        txt.Outline = true 
+                        txt.Visible = true 
+                        txt.Center = true                                   
+                        txt.Font = 1
+                        txt.Size = 15                    
+                        txt.Color = Color3.fromRGB(0, 132, 255)
+                        txt.Position = Vector2.new(vec.X,vec.Y - 10)
+                        coroutine.wrap(function()
+                            game.RunService.RenderStepped:Wait()
+                            txt:Remove()
+                        end)()
+                    end
+                end
+            end
+        end
+        if ligtingOveride then
+            lighting.Ambient = Options.lAmbient.Value
+            lighting.OutdoorAmbient = Options.lOutDoorAmbient.Value
+        end
+        if Toggles.MaxSlope.Value then
+            LocalPlayer.Character.Humanoid.MaxSlopeAngle = 999
+        end
     end
 end)
 
+local Char = LocalPlayer.Character or workspace:FindFirstChild(LocalPlayer.Name)
+local Human = Char and Char:FindFirstChildWhichIsA("Humanoid")
+
+Human:GetPropertyChangedSignal("WalkSpeed"):Connect(function()
+    if Toggles.AutoSprint.Value then
+        Human.WalkSpeed = Options.ASprintSpeed.Value
+    end
+end)
+
+LocalPlayer.CharacterAdded:Connect(function()
+    Human:GetPropertyChangedSignal("WalkSpeed"):Connect(function()
+        if Toggles.AutoSprint.Value then
+            local char = LocalPlayer:WaitForChild("Character")
+            char.Humanoid.WalkSpeed = Options.ASprintSpeed.Value
+        end
+    end)
+end)
+
 wait(1)
+
 Library:Notify('Loaded UI!');

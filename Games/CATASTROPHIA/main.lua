@@ -1,4 +1,4 @@
---// By H3#3534
+--// By H3#3534 / the good source for you :)
 
 --// Keybind: Right control
 Library = loadstring(game:HttpGet('https://pastebin.com/raw/EkM5gta4'))();
@@ -182,7 +182,7 @@ lplayer2:AddToggle('AutoSprint', { Text = 'Omni Sprint' }):OnChanged(function()
             end
         end)
     end
-end);;
+end);
 lplayer2:AddSlider('ASprintSpeed', { Text = 'Omni Speed', Default = 31, Min = 16, Max = 50, Rounding = 0 });
 lplayer2:AddLabel('SpeedBoost', { Text = 'Speed Bypass' }):AddKeyPicker('SpeedBypassKey', { Text = 'Speed Bypass', Default = 'X', Mode = 'Hold', Toggled = false });
 lplayer2:AddToggle('MaxSlope', { Text = 'Max Slope angle'}):OnChanged(function()

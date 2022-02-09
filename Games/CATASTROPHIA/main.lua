@@ -13,6 +13,7 @@ local uis = game:GetService("UserInputService")
 local Loot = game:GetService("Workspace"):WaitForChild("Loot")
 local animals = game:GetService("Workspace"):WaitForChild("Animals")
 local items = game:GetService("Workspace"):WaitForChild("Items")
+local RunService = game:GetService("RunService")
 local objectFolder = game:GetService("Workspace"):WaitForChild("Suroviny")
 local Monuments = game:GetService("Workspace").Monuments
 local oldWells = Monuments:WaitForChild("OldWells")
@@ -24,6 +25,129 @@ local Fonts = {};
 for Font, _ in next, Drawing.Fonts do
   table.insert(Fonts, Font);
 end;
+
+local inventoryView = {}
+function inventoryView:refresh(player,enabled)
+
+    if game:GetService("CoreGui"):FindFirstChild("2XinventoryView") then
+        game:GetService("CoreGui"):FindFirstChild("2XinventoryView"):Destroy()
+    end
+
+    if enabled and player then
+        local mainUI = Instance.new("ScreenGui")
+        local MainFrame = Instance.new("Frame")
+        local ItemFrame = Instance.new("Frame")
+        local UIListLayout = Instance.new("UIListLayout")
+        local PlayerNameLabel = Instance.new("TextLabel")
+        local NameLabel = Instance.new("TextLabel")
+
+        mainUI.Name = "2XinventoryView"
+        mainUI.Parent = game:GetService("CoreGui")
+        mainUI.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+                
+        MainFrame.Name = "MainFrame"
+        MainFrame.Parent = mainUI
+        MainFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+        MainFrame.BorderColor3 = Color3.fromRGB(70, 70, 70)
+        MainFrame.BorderSizePixel = 1.2
+        MainFrame.BackgroundTransparency = 0.250
+        MainFrame.Position = UDim2.new(0, 1660, 0, 300)
+        MainFrame.Size = UDim2.fromOffset(257,25)
+        MainFrame.AutomaticSize = Enum.AutomaticSize.Y
+        MainFrame.Draggable = true
+
+        NameLabel.Name = "NameLabel"
+        NameLabel.Parent = MainFrame
+        NameLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+        NameLabel.BackgroundTransparency = 1.000
+        NameLabel.Position = UDim2.new(0.0281010643, 0, -0.00293789315, 0)
+        NameLabel.Size = UDim2.new(0, 243, 0, 27)
+        NameLabel.Font = Enum.Font.SourceSans
+        NameLabel.Text = "Inventory Viewer"
+        NameLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+        NameLabel.TextSize = 24.000
+        NameLabel.TextWrapped = true
+        NameLabel.TextXAlignment = Enum.TextXAlignment.Left
+        NameLabel.TextYAlignment = Enum.TextYAlignment.Bottom
+
+        PlayerNameLabel.Name = "PlayerNameLabel"
+        PlayerNameLabel.Parent = NameLabel
+        PlayerNameLabel.BackgroundColor3 = Color3.fromRGB(10, 10, 10)
+        PlayerNameLabel.BackgroundTransparency = 0.800
+        PlayerNameLabel.BorderColor3 = Color3.fromRGB(70, 70, 70)
+        PlayerNameLabel.Position = UDim2.new(0, 0, 0, 28)
+        PlayerNameLabel.Size = UDim2.new(0, 243, 0, 27)
+        PlayerNameLabel.Font = Enum.Font.SourceSans
+        PlayerNameLabel.Text = tostring(player.Name)
+        PlayerNameLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+        PlayerNameLabel.TextSize = 23.000
+        PlayerNameLabel.TextWrapped = true
+        PlayerNameLabel.TextXAlignment = Enum.TextXAlignment.Center
+        PlayerNameLabel.TextYAlignment = Enum.TextYAlignment.Center
+
+        ItemFrame.Name = "ItemFrame"
+        ItemFrame.Parent = MainFrame
+        ItemFrame.BackgroundColor3 = Color3.fromRGB(10, 10, 10)
+        ItemFrame.BackgroundTransparency = 0.800
+        ItemFrame.BorderColor3 = Color3.fromRGB(70, 70, 70)
+        ItemFrame.ClipsDescendants = true
+        ItemFrame.Size = UDim2.fromOffset(0,0)
+        ItemFrame.Position = UDim2.new(0, 7, 0, 58)
+        ItemFrame.AutomaticSize = Enum.AutomaticSize.XY
+        ItemFrame.Draggable = true
+
+        UIListLayout.Parent = ItemFrame
+        UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder       
+
+        local insideViewer = {}
+        function insideViewer:AddItem(textName,color)
+            local Item = Instance.new("TextLabel")
+            Item.Name = "Item: "..tostring(textName)
+            Item.Parent = ItemFrame
+            Item.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+            Item.BackgroundTransparency = 1.000
+            Item.Size = UDim2.new(0, 243, 0, 19)
+            Item.Font = Enum.Font.SourceSans
+            Item.Text = tostring(textName)
+            Item.TextColor3 = color
+            Item.TextSize = 20.000
+        end       
+         
+        for i,v in pairs(player.Backpack:GetChildren()) do
+            if v:IsA("Tool") and v:FindFirstChild("Stack") then
+                insideViewer:AddItem(v.Name.." ["..v.Stack.Value.."]",Color3.fromRGB(255,255,255))
+            end
+        end
+        if player.Character and player.Character:FindFirstChildWhichIsA("Tool") then
+            local tool = player.Character:FindFirstChildWhichIsA("Tool")
+            insideViewer:AddItem(tool.Name.." ["..tool.Stack.Value.."]",Color3.fromRGB(68, 0, 255))
+        end
+    else
+        if game:GetService("CoreGui"):FindFirstChild("XinventoryView") then
+            game:GetService("CoreGui"):FindFirstChild("XinventoryView"):Destroy()
+        end
+    end
+end
+
+local function GetClosestPlayer()
+    local ClosestDistance, ClosestPlayer = math.huge, nil;
+    for _,Player in next, game:GetService("Players"):GetPlayers() do
+        if Player ~= LocalPlayer then
+        local Character = Player.Character
+            if Character and Character:FindFirstChildWhichIsA("Humanoid") and Character.Humanoid.Health > 1 then
+            local ScreenPosition, IsVisibleOnViewPort = Camera:WorldToViewportPoint(Character.HumanoidRootPart.Position)
+                if IsVisibleOnViewPort then
+                local MDistance = (Vector2.new(Mouse.X, Mouse.Y) - Vector2.new(ScreenPosition.X, ScreenPosition.Y)).Magnitude
+                    if MDistance < ClosestDistance then
+                        ClosestPlayer = Player
+                        ClosestDistance = MDistance
+                    end
+                end
+            end
+        end
+    end
+    return ClosestPlayer, ClosestDistance
+end
 
 local MainWind = Library:CreateWindow('Cata testing V.1.0: H3');
 Library:SetWatermark('Made by H3#3534 ;)');
@@ -49,7 +173,16 @@ lplayer2:AddToggle('Highjump', { Text = 'High Jump'}):OnChanged(function()
         LocalPlayer.Character.Humanoid.JumpPower = 25
     end
 end);
-lplayer2:AddToggle('AutoSprint', { Text = 'Omni Sprint' });
+lplayer2:AddToggle('AutoSprint', { Text = 'Omni Sprint' }):OnChanged(function()
+    if Toggles.Highjump.Value then
+        LocalPlayer.Character.Humanoid:GetPropertyChangedSignal("WalkSpeed"):Connect(function()
+            if Toggles.AutoSprint.Value then
+                local char = LocalPlayer:WaitForChild("Character")
+                char.Humanoid.WalkSpeed = Options.ASprintSpeed.Value
+            end
+        end)
+    end
+end);;
 lplayer2:AddSlider('ASprintSpeed', { Text = 'Omni Speed', Default = 31, Min = 16, Max = 50, Rounding = 0 });
 lplayer2:AddLabel('SpeedBoost', { Text = 'Speed Bypass' }):AddKeyPicker('SpeedBypassKey', { Text = 'Speed Bypass', Default = 'X', Mode = 'Hold', Toggled = false });
 lplayer2:AddToggle('MaxSlope', { Text = 'Max Slope angle'}):OnChanged(function()
@@ -74,7 +207,6 @@ uis.InputBegan:connect(function(input)
         until not speeding
     end
 end)
-
 uis.InputEnded:connect(function(input)
     if input.KeyCode == Enum.KeyCode[Options.SpeedBypassKey.Value] then        
         speeding = false
@@ -107,8 +239,7 @@ lPlayerMain:AddToggle('SpinbotX', { Text = 'Spinbot'}):OnChanged(function()
         Spin.Name = "Spinning"
         Spin.Parent = LocalPlayer.Character.HumanoidRootPart
         Spin.MaxTorque = Vector3.new(0, math.huge, 0)
-        Spin.AngularVelocity = Vector3.new(0,spinSpeed,0)
-        
+        Spin.AngularVelocity = Vector3.new(0,spinSpeed,0)        
     else
         for i,v in pairs(LocalPlayer.Character.HumanoidRootPart:GetChildren()) do
             if v.Name == "Spinning" then
@@ -129,6 +260,18 @@ PlayerESP:AddToggle('Boxes', { Text = 'Boxes' }):AddColorPicker('box_color', { D
 PlayerESP:AddToggle('Healthbars', { Text = 'Health bars' }):AddColorPicker('health_color', { Default = Color3.new(0, 1, 0) });
 PlayerESP:AddToggle('Chams', { Text = 'Chams' }):AddColorPicker('cham_color', { Default = Color3.new(1, 1, 1) });
 PlayerESP:AddToggle('Vis_Chams', { Text = 'Visible chams' }):AddColorPicker('vis_cham_color', { Default = Color3.new(1, 0, 0) });
+PlayerESP:AddToggle('inv_viewer', { Text = 'Inventory Viewer' }):OnChanged(function()
+    if not Toggles.inv_viewer.Value then
+        inventoryView:refresh(GetClosestPlayer(),false)
+    end
+end);
+
+game.RunService.Heartbeat:Connect(function()
+    if Toggles.inv_viewer.Value then
+        inventoryView:refresh(GetClosestPlayer(),true)
+        game.RunService.Heartbeat:wait()    
+    end
+end)
 
 local ESPSettings = PlayerESPBox:AddTab('ESP Settings');
 
@@ -442,7 +585,6 @@ Toggles.GrassESP:OnChanged(function()
         until not Toggles.GrassESP.Value       
     end
 end)
-
 Toggles.SilentFarm:OnChanged(function()
     if Toggles.SilentFarm.Value and LocalPlayer and LocalPlayer.Character then 
         repeat wait(.2)
@@ -481,7 +623,6 @@ Toggles.SilentFarm:OnChanged(function()
         until not Toggles.SilentFarm.Value
     end
 end)
-
 Toggles.AutoPick:OnChanged(function() --    game:GetService("ReplicatedStorage").Events.Sebrat:FireServer(ohInstance1)
     if Toggles.AutoPick.Value then 
         local pickUpRemote = "Sebrat"
@@ -848,15 +989,6 @@ Human:GetPropertyChangedSignal("WalkSpeed"):Connect(function()
     if Toggles.AutoSprint.Value then
         Human.WalkSpeed = Options.ASprintSpeed.Value
     end
-end)
-
-LocalPlayer.CharacterAdded:Connect(function()
-    Human:GetPropertyChangedSignal("WalkSpeed"):Connect(function()
-        if Toggles.AutoSprint.Value then
-            local char = LocalPlayer:WaitForChild("Character")
-            char.Humanoid.WalkSpeed = Options.ASprintSpeed.Value
-        end
-    end)
 end)
 
 wait(1)

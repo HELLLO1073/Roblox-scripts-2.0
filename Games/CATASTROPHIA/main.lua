@@ -18,7 +18,7 @@ local objectFolder = game:GetService("Workspace"):WaitForChild("Suroviny")
 local Monuments = game:GetService("Workspace").Monuments
 local oldWells = Monuments:WaitForChild("OldWells")
 
-loadstring(game:HttpGet('https://raw.githubusercontent.com/HELLLO1073/Roblox-scripts-2.0/main/Games/CATASTROPHIA/bypass.lua'))();
+loadstring(game:HttpGet('https://raw.githubusercontent.com/HELLLO1073/Roblox-scripts-2.0/main/Games/CATASTROPHIA/bypass.lua'))(); --// no you dont need the source for this
 Library:Notify('Loading bypasser V.2')
 
 local Fonts = {};

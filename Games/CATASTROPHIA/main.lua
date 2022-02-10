@@ -710,32 +710,34 @@ end)
 Toggles.AutoPick:OnChanged(function() --< game:GetService("ReplicatedStorage").Events.Sebrat:FireServer(ohInstance1)
     if Toggles.AutoPick.Value and LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then 
         local pickUpRemote = "Sebrat"
-        repeat wait(.2)                       
-            local remote = game:GetService("ReplicatedStorage").Events[pickUpRemote]          
-            for i,v in pairs(Loot:GetChildren()) do
-                local mainPart = v:FindFirstChild("Handle")
-                local dist = (mainPart.Position-LocalPlayer.Character.HumanoidRootPart.Position).Magnitude
-                if dist < 20 then
-                    remote:FireServer(mainPart)
-                end
-            end   
-            for i,object in pairs(objectFolder:GetChildren()) do 
-                if object.Name == "Grass" then
-                    local dist = (object.Position-LocalPlayer.Character.HumanoidRootPart.Position).Magnitude
-                    if dist < 9 then
-                        remote:FireServer(object)
+        repeat wait(.2)       
+            if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then                
+                local remote = game:GetService("ReplicatedStorage").Events[pickUpRemote]          
+                for i,v in pairs(Loot:GetChildren()) do
+                    local mainPart = v:FindFirstChild("Handle")
+                    local dist = (mainPart.Position-LocalPlayer.Character.HumanoidRootPart.Position).Magnitude
+                    if dist < 20 then
+                        remote:FireServer(mainPart)
                     end
+                end   
+                for i,object in pairs(objectFolder:GetChildren()) do 
+                    if object.Name == "Grass" then
+                        local dist = (object.Position-LocalPlayer.Character.HumanoidRootPart.Position).Magnitude
+                        if dist < 9 then
+                            remote:FireServer(object)
+                        end
+                    end
+                    if object.Name == "Bush" then
+                        for _, berry in pairs(object:GetChildren()) do
+                            if berry:IsA("Part") and berry.Name == "berry"  then
+                                local dist = (berry.Position-LocalPlayer.Character.HumanoidRootPart.Position).Magnitude
+                                if dist < 10 then
+                                    remote:FireServer(berry)
+                                end                            
+                            end                        
+                        end                    
+                    end         
                 end
-                if object.Name == "Bush" then
-                    for _, berry in pairs(object:GetChildren()) do
-                        if berry:IsA("Part") and berry.Name == "berry"  then
-                            local dist = (berry.Position-LocalPlayer.Character.HumanoidRootPart.Position).Magnitude
-                            if dist < 10 then
-                                remote:FireServer(berry)
-                            end                            
-                        end                        
-                    end                    
-                end         
             end
         until not Toggles.AutoPick.Value
     end

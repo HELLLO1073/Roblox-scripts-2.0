@@ -1,4 +1,4 @@
---// By H3#3534 / the good source for you :)
+--// By H3#3534
 
 --// Keybind: Right control
 Library = loadstring(game:HttpGet('https://pastebin.com/raw/EkM5gta4'))();
@@ -9,17 +9,17 @@ local LocalPlayer = Players.LocalPlayer
 local Mouse = LocalPlayer:GetMouse()
 local Camera = workspace.CurrentCamera
 local uis = game:GetService("UserInputService")
+local SetHiddenProp = sethiddenprop or set_hidden_prop
 
 local Loot = game:GetService("Workspace"):WaitForChild("Loot")
 local animals = game:GetService("Workspace"):WaitForChild("Animals")
 local items = game:GetService("Workspace"):WaitForChild("Items")
-local RunService = game:GetService("RunService")
 local objectFolder = game:GetService("Workspace"):WaitForChild("Suroviny")
 local Monuments = game:GetService("Workspace").Monuments
 local oldWells = Monuments:WaitForChild("OldWells")
 
-loadstring(game:HttpGet('https://raw.githubusercontent.com/HELLLO1073/Roblox-scripts-2.0/main/Games/CATASTROPHIA/bypass.lua'))(); --// no you dont need the source for this
-Library:Notify('Loading bypasser V.2')
+loadstring(game:HttpGet('https://raw.githubusercontent.com/HELLLO1073/Roblox-scripts-2.0/main/Games/CATASTROPHIA/bypass.lua'))();
+Library:Notify('Loading bypasser V.3.0')
 
 local Fonts = {};
 for Font, _ in next, Drawing.Fonts do
@@ -128,7 +128,6 @@ function inventoryView:refresh(player,enabled)
         end
     end
 end
-
 local function GetClosestPlayer()
     local ClosestDistance, ClosestPlayer = math.huge, nil;
     for _,Player in next, game:GetService("Players"):GetPlayers() do
@@ -148,6 +147,81 @@ local function GetClosestPlayer()
     end
     return ClosestPlayer, ClosestDistance
 end
+local function objectClip(args,tranparent)
+    local canCollide = not args
+    for i,v in pairs(objectFolder:GetChildren()) do
+        if v:FindFirstChild("Trunk") then
+            v.Trunk.Transparency = tranparent
+            v.Trunk.CanCollide = canCollide            
+        end
+        if v:FindFirstChild("Jehlici") then
+            for _,d in pairs(v:GetChildren()) do              
+                if d.Name == "Jehlici" then
+                    d.Decal.Transparency = tranparent
+                end
+            end
+        end
+        if string.find(v.Name, "Ore") or v.Name == "Barrel" then
+            v.Transparency = tranparent
+            v.CanCollide = canCollide
+            if v:FindFirstChild("Decal") then
+                v.Decal.Transparency = tranparent
+            end
+        end
+        if v.Name == "Bush" and v:IsA("Model") then
+            for _,p in pairs(v:GetChildren()) do
+                if p:IsA("Part") then
+                    p.Transparency = tranparent
+                    p.CanCollide = canCollide
+                end
+            end
+        end
+    end
+    for i,v in pairs(Monuments:GetChildren()) do
+        if v.Name == "Guard Tower" and v:IsA("Model") then
+            for _,p in pairs(v:GetChildren()) do
+                if p:IsA("Part") and p.Name ~= "Platform" then
+                    p.Transparency = tranparent
+                    p.CanCollide = canCollide
+                end
+                if p:IsA("UnionOperation") and p.Name ~= "Platform" then
+                    p.Transparency = tranparent
+                    p.CanCollide = canCollide
+                end
+            end
+        end
+        if v.Name == "Statue" and v:IsA("Model") then
+            for _,p in pairs(v:GetChildren()) do
+                if p:IsA("Part") or p:IsA("UnionOperation") then
+                    p.Transparency = tranparent
+                    p.CanCollide = canCollide
+                end
+            end
+        end
+        if v.Name == "RadTown" and v:IsA("Model") then
+            for _,p in pairs(v:GetDescendants()) do
+                if p.Name ~= "RadTownFloor" and p.Parent.Name ~= "Watch Tower" and p:IsA("Part") then
+                    if p.Name == "Fence" then
+                        p.Transparency = 1
+                    else
+                        p.Transparency = tranparent
+                    end                    
+                    p.CanCollide = canCollide
+                end
+                if p.Name ~= "RadTownFloor" and p.Parent.Name ~= "Watch Tower" and p:IsA("UnionOperation") then                    
+                    p.Transparency = tranparent                                        
+                    p.CanCollide = canCollide
+                end
+            end
+        end
+    end
+    for i,v in pairs(oldWells:GetDescendants()) do
+        if v:IsA("Part") or v:IsA("UnionOperation") then
+            v.Transparency = tranparent
+            v.CanCollide = canCollide
+        end
+    end
+end
 
 local MainWind = Library:CreateWindow('Cata testing V.1.0: H3');
 Library:SetWatermark('Made by H3#3534 ;)');
@@ -162,6 +236,13 @@ lplayer1:AddToggle('SilentFarm', { Text = 'Silent Farm' });
 lplayer1:AddToggle('MeleeAura', { Text = 'Melee Aura' });
 lplayer1:AddToggle('AutoPick', { Text = 'Auto PickUp' });
 lplayer1:AddToggle('AutoDrink', { Text = 'Auto Drink' });
+lplayer1:AddToggle('object_clip', { Text = 'Object Clip' }):OnChanged(function()
+    if Toggles.object_clip.Value then
+        objectClip(true,0.5)
+    else
+        objectClip(false,0)
+    end
+end);
 
 local playerTabbox2 = lPlayerWind:AddLeftTabbox();
 local lplayer2 = playerTabbox2:AddTab('Movement');
@@ -192,7 +273,6 @@ lplayer2:AddToggle('MaxSlope', { Text = 'Max Slope angle'}):OnChanged(function()
 end);
 
 local speeding = false
-
 uis.InputBegan:connect(function(input)
     if input.KeyCode == Enum.KeyCode[Options.SpeedBypassKey.Value] then
         speeding = true
@@ -287,6 +367,11 @@ local lighting = game:GetService("Lighting")
 WorldVisuals:AddLabel('Ambient'):AddColorPicker('lAmbient', { Default = lighting.Ambient });
 WorldVisuals:AddLabel('OutdoorAmbient'):AddColorPicker('lOutDoorAmbient', { Default = lighting.OutdoorAmbient });
 WorldVisuals:AddToggle('lShadows', { Text = 'Shadows' });
+
+WorldVisuals:AddToggle('lgrass', { Text = 'Remove grass' }):OnChanged(function()
+    SetHiddenProp(workspace.Terrain, "Decoration", not Toggles.lgrass.Value)
+end);
+
 WorldVisuals:AddToggle('lxray', { Text = 'x-ray' });
 
 --// World esp's
@@ -623,7 +708,7 @@ Toggles.SilentFarm:OnChanged(function()
         until not Toggles.SilentFarm.Value
     end
 end)
-Toggles.AutoPick:OnChanged(function() --    game:GetService("ReplicatedStorage").Events.Sebrat:FireServer(ohInstance1)
+Toggles.AutoPick:OnChanged(function() --< game:GetService("ReplicatedStorage").Events.Sebrat:FireServer(ohInstance1)
     if Toggles.AutoPick.Value then 
         local pickUpRemote = "Sebrat"
         repeat wait(.2)                       
@@ -977,7 +1062,7 @@ game:GetService("RunService").RenderStepped:Connect(function()
             lighting.OutdoorAmbient = Options.lOutDoorAmbient.Value
         end
         if Toggles.MaxSlope.Value then
-            LocalPlayer.Character.Humanoid.MaxSlopeAngle = 999
+            LocalPlayer.Character.Humanoid.MaxSlopeAngle = 99
         end
     end
 end)
@@ -992,5 +1077,4 @@ Human:GetPropertyChangedSignal("WalkSpeed"):Connect(function()
 end)
 
 wait(1)
-
 Library:Notify('Loaded UI!');

@@ -223,7 +223,7 @@ local function objectClip(args,tranparent)
     end
 end
 
-local MainWind = Library:CreateWindow('Cata testing V.2.5: H3');
+local MainWind = Library:CreateWindow('Cata testing V.2.7: H3');
 Library:SetWatermark('Made by H3#3534 ;)');
 Library:Notify("Welcome: "..game.Players.LocalPlayer.Name.." loading UI!");
 
@@ -257,9 +257,8 @@ end);
 lplayer2:AddToggle('AutoSprint', { Text = 'Omni Sprint' }):OnChanged(function()
     if Toggles.Highjump.Value then
         LocalPlayer.Character.Humanoid:GetPropertyChangedSignal("WalkSpeed"):Connect(function()
-            if Toggles.AutoSprint.Value then
-                local char = LocalPlayer:WaitForChild("Character")
-                char.Humanoid.WalkSpeed = Options.ASprintSpeed.Value
+            if Toggles.AutoSprint.Value and LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                LocalPlayer.Character.Humanoid.WalkSpeed = Options.ASprintSpeed.Value
             end
         end)
     end
@@ -709,7 +708,7 @@ Toggles.SilentFarm:OnChanged(function()
     end
 end)
 Toggles.AutoPick:OnChanged(function() --< game:GetService("ReplicatedStorage").Events.Sebrat:FireServer(ohInstance1)
-    if Toggles.AutoPick.Value then 
+    if Toggles.AutoPick.Value and LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then 
         local pickUpRemote = "Sebrat"
         repeat wait(.2)                       
             local remote = game:GetService("ReplicatedStorage").Events[pickUpRemote]          
@@ -742,7 +741,7 @@ Toggles.AutoPick:OnChanged(function() --< game:GetService("ReplicatedStorage").E
     end
 end)
 Toggles.AutoDrink:OnChanged(function()
-    if Toggles.AutoDrink.Value then 
+    if Toggles.AutoDrink.Value and LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then 
         repeat wait(1)       
             for i,v in pairs(oldWells:GetChildren()) do
                 if v.Name == "OldWell" and v:IsA("Model") then
@@ -756,7 +755,7 @@ Toggles.AutoDrink:OnChanged(function()
     end
 end)
 Toggles.MeleeAura:OnChanged(function()
-    if Toggles.MeleeAura.Value then
+    if Toggles.MeleeAura.Value and LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
         repeat wait(.1)
             for i,v in pairs(Players:GetChildren()) do
                 if LocalPlayer.Character:FindFirstChildWhichIsA("Tool") and LocalPlayer.Character:FindFirstChildWhichIsA("Tool"):FindFirstChild("AxeScriptUhel") and v.Character and v.Character:FindFirstChild("Head") and v ~= LocalPlayer then

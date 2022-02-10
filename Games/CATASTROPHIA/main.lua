@@ -222,6 +222,66 @@ local function objectClip(args,tranparent)
         end
     end
 end
+local freecaming = false
+local cam = workspace.CurrentCamera
+local userInput = game:GetService("UserInputService")
+local speed = 60
+local lastUpdate = 0
+
+local camerax = Instance.new('Part', workspace)
+camerax.CanCollide = false
+camerax.Anchored = true
+camerax.Transparency = 1
+camerax.Name = 'FreeCam'
+camerax.Position = LocalPlayer.Character.HumanoidRootPart.Position + Vector3.new(0,5,0)    
+
+function getNextMovement(deltaTime)
+    local nextMove = Vector3.new()
+    -- Left/Right
+    if userInput:IsKeyDown("A") or userInput:IsKeyDown("Left") then
+        nextMove = nextMove + Vector3.new(-1,0,0)
+    end
+    if userInput:IsKeyDown("D") or userInput:IsKeyDown("Right") then
+        nextMove = nextMove + Vector3.new(1,0,0)
+    end
+    -- Forward/Back
+    if userInput:IsKeyDown("W") or userInput:IsKeyDown("Up") then
+        nextMove = nextMove + Vector3.new(0,0,-1)
+    end
+    if userInput:IsKeyDown("S") or userInput:IsKeyDown("Down") then
+        nextMove = nextMove + Vector3.new(0,0,1)
+    end
+    -- Up/Down
+    if userInput:IsKeyDown("Space") or userInput:IsKeyDown("Q") then
+        nextMove = nextMove + Vector3.new(0,1,0)
+    end
+    if userInput:IsKeyDown("LeftControl") or userInput:IsKeyDown("E") then
+        nextMove = nextMove + Vector3.new(0,-1,0)
+    end
+    return CFrame.new( nextMove * (speed * deltaTime) )
+end     
+function onSelected()
+    local char = LocalPlayer.Character
+    if char then
+        local root = camerax
+        currentPos = root.Position        
+        lastUpdate = tick()
+        cam.CameraSubject = root
+        LocalPlayer.Character.HumanoidRootPart.Anchored = true
+        while freecaming do
+            local delta = tick()-lastUpdate
+            local look = (cam.Focus.p-cam.CoordinateFrame.p).unit
+            local move = getNextMovement(delta)
+            local pos = root.Position
+            root.CFrame = CFrame.new(pos,pos+look) * move
+            lastUpdate = tick()
+            wait(0.01)      
+        end
+        LocalPlayer.Character.HumanoidRootPart.Anchored = false
+        cam.CameraSubject = LocalPlayer.Character.Humanoid
+        root.Velocity = Vector3.new()
+    end
+end
 
 local MainWind = Library:CreateWindow('Cata testing V.2.7: H3');
 Library:SetWatermark('Made by H3#3534 ;)');
@@ -270,6 +330,29 @@ lplayer2:AddToggle('MaxSlope', { Text = 'Max Slope angle'}):OnChanged(function()
         LocalPlayer.Character.Humanoid.MaxSlopeAngle = 45
     end
 end);
+lplayer2:AddToggle('SpinbotX', { Text = 'Spinbot'}):OnChanged(function()
+    if Toggles.SpinbotX.Value then
+        local spinSpeed = 20        
+
+        for i,v in pairs(LocalPlayer.Character.HumanoidRootPart:GetChildren()) do
+            if v.Name == "Spinning" then
+                v:Destroy()
+            end
+        end
+
+        local Spin = Instance.new("BodyAngularVelocity")
+        Spin.Name = "Spinning"
+        Spin.Parent = LocalPlayer.Character.HumanoidRootPart
+        Spin.MaxTorque = Vector3.new(0, math.huge, 0)
+        Spin.AngularVelocity = Vector3.new(0,spinSpeed,0)        
+    else
+        for i,v in pairs(LocalPlayer.Character.HumanoidRootPart:GetChildren()) do
+            if v.Name == "Spinning" then
+                v:Destroy()
+            end
+        end
+    end
+end);
 
 local speeding = false
 uis.InputBegan:connect(function(input)
@@ -304,29 +387,16 @@ lPlayerMain:AddToggle('ThirdPerson', { Text = 'Third Person' }):OnChanged(functi
         LocalPlayer.CameraMode = Enum.CameraMode.LockFirstPerson
     end
 end);
-lPlayerMain:AddToggle('SpinbotX', { Text = 'Spinbot'}):OnChanged(function()
-    if Toggles.SpinbotX.Value then
-        local spinSpeed = 20        
-
-        for i,v in pairs(LocalPlayer.Character.HumanoidRootPart:GetChildren()) do
-            if v.Name == "Spinning" then
-                v:Destroy()
-            end
-        end
-
-        local Spin = Instance.new("BodyAngularVelocity")
-        Spin.Name = "Spinning"
-        Spin.Parent = LocalPlayer.Character.HumanoidRootPart
-        Spin.MaxTorque = Vector3.new(0, math.huge, 0)
-        Spin.AngularVelocity = Vector3.new(0,spinSpeed,0)        
+lPlayerMain:AddToggle('Freecam', { Text = 'Freecam'}):OnChanged(function()
+    if Toggles.Freecam.Value then
+        freecaming = true
+        onSelected()       
+        camerax.Position = LocalPlayer.Character.HumanoidRootPart.Position + Vector3.new(0,5,0)        
     else
-        for i,v in pairs(LocalPlayer.Character.HumanoidRootPart:GetChildren()) do
-            if v.Name == "Spinning" then
-                v:Destroy()
-            end
-        end
+        freecaming = false
     end
 end);
+
 
 local VisualsTab = MainWind:AddTab('Visuals');
 local PlayerESPBox = VisualsTab:AddLeftTabbox();

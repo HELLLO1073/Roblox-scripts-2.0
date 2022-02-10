@@ -223,7 +223,7 @@ local function objectClip(args,tranparent)
     end
 end
 
-local MainWind = Library:CreateWindow('Cata testing V.1.0: H3');
+local MainWind = Library:CreateWindow('Cata testing V.2.5: H3');
 Library:SetWatermark('Made by H3#3534 ;)');
 Library:Notify("Welcome: "..game.Players.LocalPlayer.Name.." loading UI!");
 

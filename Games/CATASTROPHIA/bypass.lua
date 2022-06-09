@@ -1,3 +1,4 @@
+print("Something has happend")
 --> This is my bypass no look!!!
 
 _, Protected_by_MoonSecV2, Discord = 'discord.gg/gQEH2uZxUk'

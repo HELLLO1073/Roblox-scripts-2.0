@@ -168,7 +168,7 @@ UISection:addKeybind({title = "UI Keybind", key = Enum.KeyCode.LeftAlt,
 
 CLog(nil, "Loading %50")
 
---// Simple spectate bypass
+--// Simple ass spectate bypass
 pcall(function()
     if not _G.spectateBypassEnabled then
         local game_mt = getrawmetatable(game)

@@ -1,6 +1,6 @@
 --// Anomic Original | Anomiss beta | Open source
---// Credits: ESP Library : Sirius esp lib, Creator H4#0321
---// If you want to use any scripts from here please dm me
+--// Credits: ESP Library : Sirius esp lib, Script Creator : H4#0321
+--// If you want to use any scripts from here please dm me, thanks
 
 --// Variables
 print("Loading | %0")
@@ -147,13 +147,16 @@ local Anomiss = {
         Walkspeed = 13,
         RunSpeed = 23,
         Running = false,
-        Flying = false        
+        Flying = false,
+        InfiniteJump = false,
+        Noclip = false 
     },
     GunModifiers = {
         FlightShot = false,
 
     }
 }
+
 local ValidItemList = {
 	semis = {"Combat Pistol", "Classic Pistol", "Snubnose", "Revolver", "Pistol .50", "Heavy Pistol", "Handgun", "Autorevolver"},
 	autos = {"Service Rifle", "PDW .45", "Bullpup Rifle", "Skorpion", "Tactical SMG", "Micro SMG", "Riot PDW", "Carbine", "Battle Rifle MKII", "Kalashnikov", "SMG", "Bullpup SMG", "Battle Rifle", "AR"},
@@ -172,7 +175,6 @@ local Settings = {
 }
 
 --// Other Variables
-local InfiniteJump = false
 local fovOveride = false
 local fovValue = 120
 local Fov_Circle = nil
@@ -188,7 +190,7 @@ print("Loading | %20")
 local function PlayerFromName(name)                     for i,v in pairs(Players:GetPlayers()) do if v.Name == tostring(name) then return v; end end end
 local function CheckVisible(Origin, Character, Part)    if Anomiss.Aimbot.Checks.Visible then local MyCharacter = LocalPlayer.Character if MyCharacter ~= nil and Character ~= nil then local PartFound = workspace.FindPartOnRayWithIgnoreList(workspace, Ray.new(Origin, Part.Position - Origin), {MyCharacter, CCamera, Character}, false, true) return PartFound == nil end else return true end end
 local function FireGun(FireKey)
-    print("Fired gun!")
+    --print("Fired gun!")
     if FireKey == "Mouse1" then
         mouse1press()
         task.wait(0.5)
@@ -292,7 +294,6 @@ local function UpdateChams()
         end
     end
 end
-
 local function StartFly()  
     if game.Workspace:FindFirstChild('ABC') ~= nil then game.Workspace:FindFirstChild('ABC'):Destroy() end
     local part = Instance.new('Part')
@@ -433,6 +434,7 @@ local function CustomNotify(title, text, backgroundColor, ismenu)
 	Card.BackgroundColor3 = backgroundColor
 	LocalPlayer.PlayerGui.Notify:Play()
 end
+
 CustomNotify("[Anomiss]", "Loading GUI", Color3.fromRGB(46, 46, 46), false)
 local locationNames = { "Unkown1","Safe 1","Safe 2","Safe 3","Airfield","Lobby room","Police","Hospital","Bank","Okby Steppe","Eastdike","Logs","Outlook","Arway","Pahrump","ATM 1","Tow yard","Gas station Eastdike"}
 local locationPositions = {
@@ -455,6 +457,7 @@ local locationPositions = {
     ["Tow yard"] = CFrame.new(364.241394, -3.38592649, -1720),
     ["Gas station Eastdike"] = CFrame.new(364.241394, -3.38592649, -1720)
 }
+
 local function TeleportToLocation(location, bool)
     if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
         if bool then
@@ -464,6 +467,7 @@ local function TeleportToLocation(location, bool)
         end
     end
 end
+
 local function ValidToolModel(toolModel)
     if toolModel:FindFirstChild("PlayerWhoDropped") then
         return false
@@ -479,6 +483,7 @@ local function ValidToolModel(toolModel)
 
     return false
 end
+
 local function GrabTool(toolModel)
     if toolModel == nil then
         CustomNotify("[Anomiss]", "Tool sniper error (Tool is nil)", Color3.fromRGB(200, 0, 0), false)
@@ -498,6 +503,7 @@ local function GrabTool(toolModel)
         end
     end
 end
+
 local function GrabToolFromName(name)
     local count = 0
     local tool = nil
@@ -519,6 +525,7 @@ local function GrabToolFromName(name)
 
     GrabTool(tool)
 end
+
 local function PurchaseItems(name, quantity, isCrate)
     if not isCrate then
         for i = 1, quantity, 1 do 
@@ -530,6 +537,30 @@ local function PurchaseItems(name, quantity, isCrate)
 		CSEvents.DeliveryFunction:FireServer("PickUpDelivery",name)
     end
 end
+
+local noclipConnection = nil
+local function ToggleNoclip()
+
+    local function ClipLoop()
+        if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+            for i,v in next, LocalPlayer.Character:GetDescendants() do
+                if v:IsA("BasePart") and v.CanCollide == true then
+                    if Anomiss.Movement.Noclip then
+                        v.CanCollide = false
+                    else
+                        v.CanCollide = true
+                    end
+                end
+            end
+        end
+    end
+
+    if noclipConnection == nil then
+        Settings.nocliploop = game:GetService("RunService").Stepped:Connect(ClipLoop)
+    end
+
+end
+
 local function GetCurrentGun()
     if LocalPlayer.Character then
 		for i,v in next, LocalPlayer.Character:GetChildren() do
@@ -663,7 +694,7 @@ end
 
 do --// LocalPlayer
     Local_Movement:AddToggle({text = 'Infinite Jump', flag = '', tooltip = 'Enables Infinite jump.', callback = function(bool)
-        InfiniteJump = bool
+        Anomiss.Movement.InfiniteJump = bool
     end})
     Local_Movement:AddToggle({text = 'Max slope angle', flag = '', tooltip = 'Helps you climb terrain and certain objects.', callback = function(bool)
         if bool then
@@ -680,7 +711,7 @@ do --// LocalPlayer
         else
             StopFly()
         end
-    end})     
+    end})    
     FlightToggle:AddBind({mode = 'toggle', callback = function(bool)
         Anomiss.Movement.Flying = bool
         if Anomiss.Movement.Flying then
@@ -689,6 +720,16 @@ do --// LocalPlayer
             StopFly()
         end
     end})
+
+    local NoclipToggle = Local_Movement:AddToggle({text = 'Noclip', flag = '', tooltip = '', callback = function(bool)
+        Anomiss.Movement.Noclip = bool
+        ToggleNoclip()
+    end})    
+    NoclipToggle:AddBind({mode = 'toggle', callback = function(bool)
+        Anomiss.Movement.Noclip = bool
+        ToggleNoclip()
+    end})
+
     Local_Movement:AddSlider({text = 'Flight Speed', flag = 'FlightSpeed', tooltip = 'The speed at which flight travels.', default = 2, min = 1, max = 10, increment = 1, callback = function(number)
         FlightSpeed = number
     end})
@@ -1238,21 +1279,22 @@ UserInput.InputEnded:Connect(function(input, game)
         Anomiss.Movement.Running = false
     end
 end) 
-UserInput.InputBegan:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton2 then
+UserInput.InputBegan:Connect(function(input, game)
+    if input.UserInputType == Enum.UserInputType.MouseButton2 and not game then
         Aiming = true
     end
 end)
-UserInput.InputEnded:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton2 then
+UserInput.InputEnded:Connect(function(input, game)
+    if input.UserInputType == Enum.UserInputType.MouseButton2 and not game then
         Aiming = false
     end
 end)
-Mouse.KeyDown:Connect(function(Key)
-	if InfiniteJump == true and Key == " " then
-		LocalPlayer.Character:FindFirstChildOfClass('Humanoid'):ChangeState(3)
-	end
-end)
+
+UserInput.InputEnded:Connect(function(input, game)
+    if Anomiss.Movement.InfiniteJump and input.KeyCode == Enum.KeyCode.Space and not game then
+        LocalPlayer.Character:FindFirstChild("HumanoidRootPart").Velocity = Vector3.new(0, 40, 0)
+    end
+end) 
 
 game:GetService("RunService").RenderStepped:Connect(function() 
 

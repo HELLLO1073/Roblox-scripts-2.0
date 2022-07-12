@@ -3,17 +3,21 @@
 --// If you want to use any scripts from here please dm me
 
 --// Variables
+print("Loading | %0")
 local CharacterParts = {"Head", "HumanoidRootPart", "LeftHand", "RightHand", "LeftFoot", "RightFoot"}
 local MessageCard = game:GetService("ReplicatedStorage"):WaitForChild("UserInterface").Card
 local CSEvents = game:GetService("ReplicatedStorage"):WaitForChild("_CS.Events")
 local Entities = game:GetService("Workspace"):WaitForChild("Entities")
 local UserInput = game:GetService("UserInputService")
 local Players = game:GetService("Players")
+print("Loading | %5")
 local LocalPlayer = Players.LocalPlayer
 local CCamera = workspace.CurrentCamera
 local Mouse = LocalPlayer:GetMouse()
 local espLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Sirius/request/library/esp/esp.lua'),true))()
- 
+
+print("Loading | %10")
+
 espLib.whitelist = {} 
 espLib.blacklist = {}
 espLib.options = {
@@ -72,6 +76,8 @@ espLib.options = {
 local BeamPart = Instance.new("Part", workspace)    
 BeamPart.Name = "BeamPart"
 BeamPart.Transparency = 1
+
+print("Loading | %15")
 
 --// Settings
 local Anomiss = {
@@ -168,6 +174,8 @@ local ChamCache = {}
 local FLYING = false
 local FlightSpeed = 2
 local ChamColorPicker
+
+print("Loading | %20")
 
 --// Functions 
 local function PlayerFromName(name)                     for i,v in pairs(Players:GetPlayers()) do if v.Name == tostring(name) then return v; end end end
@@ -418,6 +426,7 @@ local function CustomNotify(title, text, backgroundColor, ismenu)
 	Card.BackgroundColor3 = backgroundColor
 	LocalPlayer.PlayerGui.Notify:Play()
 end
+CustomNotify("[Anomiss]", "Loading GUI", Color3.fromRGB(46, 46, 46), false)
 local locationNames = { "Unkown1","Safe 1","Safe 2","Safe 3","Airfield","Lobby room","Police","Hospital","Bank","Okby Steppe","Eastdike","Logs","Outlook","Arway","Pahrump","ATM 1","Tow yard","Gas station Eastdike"}
 local locationPositions = {
     ["Unkown1"] = CFrame.new(34.3238869, -34.2613297, 62.5588074),
@@ -524,14 +533,18 @@ local function GetCurrentGun()
 	end
 end
 
+print("Loading | %40")
+print("Loading | %45 Loading UI Library")
 -- Initialize Library
 local library = loadstring(syn.request({Url = 'https://raw.githubusercontent.com/Anomiss01/RS_wadwd/main/lib/library1'}).Body)({cheatname = 'Anomiss 1.0.2', gamename = 'Anomic Original [BETA]'}); library:init();
 
 -- Create New Window
 local window = library.NewWindow({title = library.cheatname..' | '..library.gamename, size = UDim2.new(0,525,0,650)})
+print("Loading | %47")
 
 -- Hardcoded Settings Tab [Configs, Themes, Etc]
 local tab_settings = library:CreateSettingsTab(window)
+print("Loading | %48")
 
 -- Create New Tab's
 local A_Tab = window:AddTab('Aimbot-Combat')
@@ -562,6 +575,7 @@ local ItemSectionMisc = M_Tab:AddSection('Tool sniper', 1)
 local LocalTeleport = M_Tab:AddSection('Teleportation', 1) 
 local TeamSectionMisc = M_Tab:AddSection('Teams', 2) 
 
+print("Loading | %60 | Main tabs")
 
 do --// Aimbot main 
     Aimbot:AddToggle({text = 'Enabled', flag = '', tooltip = 'Enables default aimbot.', callback = function(bool)
@@ -1204,6 +1218,8 @@ do --// Miscellaneous
     end})
 end
 
+print("Loading | %70 | Connections")
+
 UserInput.InputBegan:Connect(function(input, game)
     if input.KeyCode == Enum.KeyCode.LeftShift and not game then
        Anomiss.Movement.Running = true
@@ -1333,6 +1349,8 @@ game:GetService("RunService").Heartbeat:Connect(function()
 
 end)
 
+print("Loading | %75")
+
 local function CorrectArguments(Args)
     local Matching = 0
     local Required = 2
@@ -1405,6 +1423,8 @@ coroutine.wrap(function()
         task.wait(30)
     end    
 end)
+
+print("Loading | %80 | Hooking")
 --// Hooking
 local RayCastLength = 4500
 local oldNamecall, oldIndex
@@ -1485,9 +1505,12 @@ oldIndex = hookmetamethod(game, "__index", newcclosure(function(Self, index)
     return oldIndex(Self, index)
 end))
 
+print("Loading | %90")
 StopConnections()
 LocalPlayer.CharacterAdded:Connect(StopConnections)
 espLib:Init()  
 
+print("Loading | %95")
+
 CustomNotify("[Anomiss]", "Welcome "..LocalPlayer.Name..", made by H4#0321", Color3.fromRGB(46, 46, 46), false)
-print("Done loading!")
+print("Loading | %100 | Finished")

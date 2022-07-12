@@ -536,7 +536,8 @@ end
 print("Loading | %40")
 print("Loading | %45 Loading UI Library")
 -- Initialize Library
-local library = loadstring(syn.request({Url = 'https://raw.githubusercontent.com/Anomiss01/RS_wadwd/main/lib/library1'}).Body)({cheatname = 'Anomiss 1.0.2', gamename = 'Anomic Original [BETA]'}); library:init();
+local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/Anomiss01/RS_wadwd/main/lib/library1"))({cheatname = 'Anomiss 1.0.2', gamename = 'Anomic Original [BETA]'}); 
+library:init();
 
 -- Create New Window
 local window = library.NewWindow({title = library.cheatname..' | '..library.gamename, size = UDim2.new(0,525,0,650)})

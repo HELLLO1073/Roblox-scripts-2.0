@@ -3,7 +3,7 @@
 --// If you want to use any scripts from here please dm me
 
 --// Variables
-print("Loading | %0")
+print("Loading | %0 | X2")
 local CharacterParts = {"Head", "HumanoidRootPart", "LeftHand", "RightHand", "LeftFoot", "RightFoot"}
 local MessageCard = game:GetService("ReplicatedStorage"):WaitForChild("UserInterface").Card
 local CSEvents = game:GetService("ReplicatedStorage"):WaitForChild("_CS.Events")

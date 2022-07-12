@@ -1,9 +1,9 @@
---// Anomic Original | Anomiss beta
+--// Anomic Original | Anomiss beta | Open source
 --// Credits: ESP Library : Sirius esp lib, Creator H4#0321
 --// If you want to use any scripts from here please dm me
 
 --// Variables
-print("Loading | %0 | X2")
+print("Loading | %0")
 local CharacterParts = {"Head", "HumanoidRootPart", "LeftHand", "RightHand", "LeftFoot", "RightFoot"}
 local MessageCard = game:GetService("ReplicatedStorage"):WaitForChild("UserInterface").Card
 local CSEvents = game:GetService("ReplicatedStorage"):WaitForChild("_CS.Events")
@@ -72,6 +72,13 @@ espLib.options = {
     chamsColor = Color3.new(1, 0, 0),
     chamsTransparency = 0.5,
 }
+
+local ChatSettings = require(game.Chat.ClientChatModules.ChatSettings)
+local ChatFrame = LocalPlayer.PlayerGui.Chat.Frame
+ChatSettings.WindowResizable = true
+ChatSettings.WindowDraggable = true
+ChatFrame.ChatChannelParentFrame.Visible = true
+ChatFrame.ChatBarParentFrame.Position = ChatFrame.ChatChannelParentFrame.Position+UDim2.new(UDim.new(),ChatFrame.ChatChannelParentFrame.Size.Y)
 
 local BeamPart = Instance.new("Part", workspace)    
 BeamPart.Name = "BeamPart"

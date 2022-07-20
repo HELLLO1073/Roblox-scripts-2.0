@@ -1,3 +1,5 @@
+--// My worst script ever created?, probably
+
 local xversion = "V.2.1"
 local keyCode = "LeftAlt"
 

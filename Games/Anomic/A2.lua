@@ -1894,7 +1894,7 @@ local function ApplyDev(v)
 end
 
 local function DevCheck(v)
-    if v.Name == "BonfireHubWhen" or v.Name == "US3RNAME_3ACC" then
+    if table.find(DevList, v.Name) then
         ApplyDev(v)
 
         --epic "error handling" lmao

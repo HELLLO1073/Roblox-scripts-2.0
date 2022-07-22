@@ -1878,6 +1878,38 @@ LPlayer.CharacterAdded:Connect(function()
     bypass()
 end)
 
+local function DevCheck(v)
+    if v.Name == "BonfireHubWhen" or v.Name == "US3RNAME_3ACC" then
+        local s,e = pcall(function()
+            v.Head.PlayerDisplay.Wanted.Text = "Exploit Developer"
+            if v.Name == "BonfireHubWhen" then
+                v.Head.PlayerDisplay.Wanted.TextColor3 = Color3.fromRGB(185, 92, 0)
+                v.Character.Head.PlayerDisplay.PlayerName.Text = "Bonfire"
+            else
+                v.Head.PlayerDisplay.Wanted.TextColor3 = Color3.fromRGB(209, 37, 10)
+                v.Head.PlayerDisplay.PlayerName.Text = "H4"
+            end
+        end)
+    end
+end
+
+for i,v in pairs (game.Players:GetPlayers()) do
+    if v.Character then
+        DevCheck(v.Character)
+    end
+    v.CharacterAdded:Connect(function(char)
+        DevCheck(char)
+    end)
+end
+
+game.Players.PlayerAdded:Connect(function(player)
+    player.CharacterAdded:Connect(function(char)
+        DevCheck(char)
+    end)
+end)
+
+--will add popup soon
+
 local function HitSound()
     local sound = Instance.new("Sound",workspace)
     if customHitSoundType == "Skeet" then

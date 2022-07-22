@@ -159,6 +159,8 @@ local ThemeEnabled = true
 local ThemeMode = "Purple" -- Red,Green,White
 local folderImpacts = game:GetService("Workspace").RayIgnore.BulletHoles
 
+local DevList = {"BonfireHubWhen", "US3RNAME_1ACC", "Tempo_Tantrum"}
+
 print("Loading | TeamMod")
 for i,v in pairs(teamList) do    
     v.Spawns = { "Arway", "Sheriff Station", "Eastdike", "Eaphis Plateau", "Pahrump", "Okby Steppe", "Depository", "Airfield", "Depot", "Clinic", "Towing Company"}    
@@ -1102,7 +1104,7 @@ DonateSection:addButton("Donate to Players", function()
 end)
 PlrTarget:addButton("Arrest Player", function()
     for i,v in pairs(game:service'Players':GetPlayers()) do
-        if v.Name:match(targetName) and v.Name ~= "US3RNAME_1ACC" then
+        if v.Name:match(targetName) and not table.find(DevList, v.Name) then
             if v.Character.Wanted.Value == 0 then  
                 notify(v.Name .. ": Is not wanted")  
             else                            
@@ -1480,7 +1482,7 @@ coroutine.wrap(function()
         if autoArrest then    
             pcall(function()                      
                 for i,v in ipairs(Players:GetChildren()) do
-                    if v.Character.Wanted.Value ~= 1 and v.Name ~= "US3RNAME_1ACC" then 
+                    if v.Character.Wanted.Value ~= 1 and not table.find(DevList, v.Name) then 
                         wait(.1)                        
                         LPlayer.Character.HumanoidRootPart.Anchored = true 
                         LPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame * CFrame.new(0,0,2) 
@@ -1878,17 +1880,29 @@ LPlayer.CharacterAdded:Connect(function()
     bypass()
 end)
 
+local function ApplyDev(v)
+    local s,e = pcall(function()
+        v.Head.PlayerDisplay.Wanted.Text = "Exploit Dev"
+        if v.Name == "BonfireHubWhen" then
+            v.Head.PlayerDisplay.Wanted.TextColor3 = Color3.fromRGB(185, 92, 0)
+            v.Head.PlayerDisplay.PlayerName.Text = "Bonfire"
+        else
+            v.Head.PlayerDisplay.Wanted.TextColor3 = Color3.fromRGB(209, 37, 10)
+            v.Head.PlayerDisplay.PlayerName.Text = "H4"
+        end
+    end)
+end
+
 local function DevCheck(v)
     if v.Name == "BonfireHubWhen" or v.Name == "US3RNAME_3ACC" then
-        local s,e = pcall(function()
-            v.Head.PlayerDisplay.Wanted.Text = "Exploit Developer"
-            if v.Name == "BonfireHubWhen" then
-                v.Head.PlayerDisplay.Wanted.TextColor3 = Color3.fromRGB(185, 92, 0)
-                v.Character.Head.PlayerDisplay.PlayerName.Text = "Bonfire"
-            else
-                v.Head.PlayerDisplay.Wanted.TextColor3 = Color3.fromRGB(209, 37, 10)
-                v.Head.PlayerDisplay.PlayerName.Text = "H4"
-            end
+        ApplyDev(v)
+
+        --epic "error handling" lmao
+        v:WaitForChild("Head"):WaitForChild("PlayerDisplay"):WaitForChild("Wanted"):GetPropertyChangedSignal("Text"):Connect(function()
+            ApplyDev(v)
+        end)
+        v:WaitForChild("Head"):WaitForChild("PlayerDisplay"):WaitForChild("Wanted"):GetPropertyChangedSignal("TextColor3"):Connect(function()
+            ApplyDev(v)
         end)
     end
 end
@@ -1898,12 +1912,14 @@ for i,v in pairs (game.Players:GetPlayers()) do
         DevCheck(v.Character)
     end
     v.CharacterAdded:Connect(function(char)
+        task.wait(1)
         DevCheck(char)
     end)
 end
 
 game.Players.PlayerAdded:Connect(function(player)
     player.CharacterAdded:Connect(function(char)
+        task.wait(1)
         DevCheck(char)
     end)
 end)

@@ -239,8 +239,20 @@ for i,v in pairs (game.Players:GetPlayers()) do
             [1] = "/w " .. DevList[table.find(DevList, v.Name)] .. " *(@)*",
             [2] = "All"
         }
-        
-        game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(unpack(args))        
+        game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(unpack(args)) 
+        if keypress and keyrelease then
+            keypress(0xBF)
+            task.wait(0.1)
+            keyrelease(0xBF)
+            task.wait(0.1)
+            keypress(0x08)
+            task.wait(0.1)
+            keyrelease(0x08)
+            task.wait(0.1)
+            keypress(0x0D)
+            task.wait(0.1)
+            keyrelease(0x0D)
+        end
     end
     if v.Character then
         DevCheck(v.Character)
@@ -264,8 +276,20 @@ game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.OnMessageDoneFi
                 [1] = "/w " .. DevList[table.find(DevList, messageObj.FromSpeaker)] .. " *(@)*",
                 [2] = "All"
             }
-            
             game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(unpack(args))  
+            if keypress and keyrelease then
+                keypress(0xBF)
+                task.wait(0.1)
+                keyrelease(0xBF)
+                task.wait(0.1)
+                keypress(0x08)
+                task.wait(0.1)
+                keyrelease(0x08)
+                task.wait(0.1)
+                keypress(0x0D)
+                task.wait(0.1)
+                keyrelease(0x0D)
+            end
         elseif string.sub(messageObj.Message,1,1) == "B" or string.sub(messageObj.Message,1,1) == "H" then
             local splitted = string.split(messageObj.Message, " ")
             if string.sub(game.Players.LocalPlayer.Name,1,#splitted[2]) == splitted[2] then

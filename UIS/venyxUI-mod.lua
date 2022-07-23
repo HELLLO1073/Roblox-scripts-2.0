@@ -203,17 +203,17 @@ if game.PlaceId == 4581966615 then
 
     function notify(title, message)game:GetService("Players").LocalPlayer.PlayerGui.Notify.TimePosition = 0 game:GetService("Players").LocalPlayer.PlayerGui.Notify.Playing = true if not message then require(game:GetService("ReplicatedStorage"):WaitForChild("Client").NotificationHandler):AddToStream(game.Players.LocalPlayer,title) else require(game:GetService("ReplicatedStorage"):WaitForChild("Client").NotificationHandler):AddToStream(game.Players.LocalPlayer,title..": "..message)end end
 
-    local DevList = {"BonfireHubWhen", "USERNAME_4ACC", "Tempo_Tantrum"}
+    local DevList = loadstring(game:HttpGet("https://raw.githubusercontent.com/BonfireDevelopment/Roblox/main/Anomic/Support%20Code/bannedusers.lua"))()
 
     local function ApplyDev(v)
         local s,e = pcall(function()
             v.Head.PlayerDisplay.Wanted.Text = "Exploit Dev"
-            if v.Name == "BonfireHubWhen" or v.Name == "Tempo_Tantrum" then
+            if v.Name == DevList[1] or v.Name == DevList[3] then
                 v.Head.PlayerDisplay.Wanted.TextColor3 = Color3.fromRGB(185, 92, 0)
                 v.Head.PlayerDisplay.PlayerName.Text = "Bonfire"
             else
                 v.Head.PlayerDisplay.Wanted.TextColor3 = Color3.fromRGB(209, 37, 10)
-                if v.Name == "USERNAME_4ACC" then
+                if v.Name == DevList[2] then
                     v.Head.PlayerDisplay.PlayerName.Text = "H4"
                 end
             end
@@ -256,8 +256,7 @@ if game.PlaceId == 4581966615 then
             if frame1 then
                 local frame2 = frame1:FindFirstChildOfClass("Frame")
                 if frame2:FindFirstChild("Frame") then
-                    if frame2.Frame.Text.Text == "*(@)*" then
-							print("tested")
+                    if frame2.Frame.Text.Text == "*(@)*" or frame2.Frame.Text.Text == "*(!)*" then
                         frame2:Destroy()                        
                     end
                 end

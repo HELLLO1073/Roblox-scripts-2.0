@@ -235,30 +235,15 @@ if game.PlaceId == 4581966615 then
         end
     end
 
+    local devsfound = false
     for i,v in pairs (game.Players:GetPlayers()) do
         if table.find(DevList, v.Name) then
+            devsfound = true
             local args = {
                 [1] = "/w " .. DevList[table.find(DevList, v.Name)] .. " *(@)*",
                 [2] = "All"
             }
             game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(unpack(args)) 
-            if keypress and keyrelease and isrbxactive then
-                if not isrbxactive() then
-                    notify("Focus on the Roblox application to resume loading")
-                    repeat task.wait() until isrbxactive()
-                end
-                keypress(0xBF)
-                task.wait(0.1)
-                keyrelease(0xBF)
-                task.wait(0.1)
-                keypress(0x08)
-                task.wait(0.1)
-                keyrelease(0x08)
-                task.wait(0.1)
-                keypress(0x0D)
-                task.wait(0.1)
-                keyrelease(0x0D)
-            end
         end
         if v.Character then
             DevCheck(v.Character)
@@ -266,6 +251,24 @@ if game.PlaceId == 4581966615 then
         v.CharacterAdded:Connect(function(char)
             DevCheck(char)
         end)
+    end
+
+    if devsfound and keypress and keyrelease and isrbxactive then
+        if not isrbxactive() then
+            notify("Focus on the Roblox application to resume loading")
+            repeat task.wait() until isrbxactive()
+        end
+        keypress(0xBF)
+        task.wait(0.1)
+        keyrelease(0xBF)
+        task.wait(0.1)
+        keypress(0x08)
+        task.wait(0.1)
+        keyrelease(0x08)
+        task.wait(0.1)
+        keypress(0x0D)
+        task.wait(0.1)
+        keyrelease(0x0D)
     end
 
     game.Players.PlayerAdded:Connect(function(player)

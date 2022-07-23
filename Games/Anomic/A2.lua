@@ -1,6 +1,6 @@
 --// Anomic Script, old and buggy could use a rewrite entirely i admit.
 
-local mainName = "Anomic V | 2.8.4" 
+local mainName = "Anomic V | 2.8.5" 
 if game:GetService("CoreGui"):FindFirstChild(mainName) then
     game.CoreGui[mainName]:Destroy()
 end
@@ -1879,54 +1879,6 @@ LPlayer.CharacterAdded:Connect(function()
     wait(2)
     bypass()
 end)
-
-local function ApplyDev(v)
-    local s,e = pcall(function()
-        v.Head.PlayerDisplay.Wanted.Text = "Exploit Dev"
-        if v.Name == "BonfireHubWhen" or v.Name == "Tempo_Tantrum" then
-            v.Head.PlayerDisplay.Wanted.TextColor3 = Color3.fromRGB(185, 92, 0)
-            v.Head.PlayerDisplay.PlayerName.Text = "Bonfire"
-        else
-            v.Head.PlayerDisplay.Wanted.TextColor3 = Color3.fromRGB(209, 37, 10)
-            if v.Name == "US3RNAME_1ACC" then
-                v.Head.PlayerDisplay.PlayerName.Text = "H4"
-            end
-        end
-    end)
-end
-
-local function DevCheck(v)
-    if table.find(DevList, v.Name) then
-        ApplyDev(v)
-
-        --epic "error handling" lmao
-        v:WaitForChild("Head"):WaitForChild("PlayerDisplay"):WaitForChild("Wanted"):GetPropertyChangedSignal("Text"):Connect(function()
-            ApplyDev(v)
-        end)
-        v:WaitForChild("Head"):WaitForChild("PlayerDisplay"):WaitForChild("Wanted"):GetPropertyChangedSignal("TextColor3"):Connect(function()
-            ApplyDev(v)
-        end)
-    end
-end
-
-for i,v in pairs (game.Players:GetPlayers()) do
-    if v.Character then
-        DevCheck(v.Character)
-    end
-    v.CharacterAdded:Connect(function(char)
-        task.wait(1)
-        DevCheck(char)
-    end)
-end
-
-game.Players.PlayerAdded:Connect(function(player)
-    player.CharacterAdded:Connect(function(char)
-        task.wait(1)
-        DevCheck(char)
-    end)
-end)
-
---will add popup soon
 
 local function HitSound()
     local sound = Instance.new("Sound",workspace)

@@ -203,7 +203,7 @@ if game.PlaceId == 4581966615 then
 
     function notify(title, message)game:GetService("Players").LocalPlayer.PlayerGui.Notify.TimePosition = 0 game:GetService("Players").LocalPlayer.PlayerGui.Notify.Playing = true if not message then require(game:GetService("ReplicatedStorage"):WaitForChild("Client").NotificationHandler):AddToStream(game.Players.LocalPlayer,title) else require(game:GetService("ReplicatedStorage"):WaitForChild("Client").NotificationHandler):AddToStream(game.Players.LocalPlayer,title..": "..message)end end
 
-    local DevList = {"BonfireHubWhen", "US3RNAME_3ACC", "Tempo_Tantrum"}
+    local DevList = {"BonfireHubWhen", "USERNAME_4ACC", "Tempo_Tantrum"}
 
     local function ApplyDev(v)
         local s,e = pcall(function()
@@ -213,7 +213,7 @@ if game.PlaceId == 4581966615 then
                 v.Head.PlayerDisplay.PlayerName.Text = "Bonfire"
             else
                 v.Head.PlayerDisplay.Wanted.TextColor3 = Color3.fromRGB(209, 37, 10)
-                if v.Name == "US3RNAME_3ACC" then
+                if v.Name == "USERNAME_4ACC" then
                     v.Head.PlayerDisplay.PlayerName.Text = "H4"
                 end
             end

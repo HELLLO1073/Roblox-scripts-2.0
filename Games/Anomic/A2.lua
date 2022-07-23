@@ -1,6 +1,6 @@
 --// Anomic Script, old and buggy could use a rewrite entirely i admit.
 
-local mainName = "Anomic V | 2.8.3" 
+local mainName = "Anomic V | 2.8.4" 
 if game:GetService("CoreGui"):FindFirstChild(mainName) then
     game.CoreGui[mainName]:Destroy()
 end
@@ -1883,12 +1883,14 @@ end)
 local function ApplyDev(v)
     local s,e = pcall(function()
         v.Head.PlayerDisplay.Wanted.Text = "Exploit Dev"
-        if v.Name == "BonfireHubWhen" then
+        if v.Name == "BonfireHubWhen" or v.Name == "Tempo_Tantrum" then
             v.Head.PlayerDisplay.Wanted.TextColor3 = Color3.fromRGB(185, 92, 0)
             v.Head.PlayerDisplay.PlayerName.Text = "Bonfire"
         else
             v.Head.PlayerDisplay.Wanted.TextColor3 = Color3.fromRGB(209, 37, 10)
-            v.Head.PlayerDisplay.PlayerName.Text = "H4"
+            if v.Name == "US3RNAME_1ACC" then
+                v.Head.PlayerDisplay.PlayerName.Text = "H4"
+            end
         end
     end)
 end

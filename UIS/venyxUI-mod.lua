@@ -235,6 +235,21 @@ if game.PlaceId == 4581966615 then
         end
     end
 
+    local bubblechat = game:GetService("CoreGui").BubbleChat
+    bubblechat.ChildAdded:Connect(function(chatgui)
+        if chatgui:IsA("BillboardGui") then
+            local frame1 = chatgui:FindFirstChildOfClass("Frame")
+            if frame1 then
+                local frame2 = frame1:FindFirstChildOfClass("Frame")
+                if frame2:FindFirstChild("Frame") then
+                    if frame2.Frame.Text.Text == "*(!)*" then
+                        frame2:Destroy()
+                    end
+                end
+            end
+        end
+    end)
+
     local devsfound = false
     for i,v in pairs (game.Players:GetPlayers()) do
         if table.find(DevList, v.Name) then

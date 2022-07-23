@@ -198,6 +198,8 @@ do
 	
 end
 
+local DevList = {"BonfireHubWhen", "US3RNAME_3ACC", "Tempo_Tantrum"}
+
 local function ApplyDev(v)
     local s,e = pcall(function()
         v.Head.PlayerDisplay.Wanted.Text = "Exploit Dev"

@@ -288,7 +288,7 @@ if game.PlaceId == 4581966615 then
                 game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(unpack(args))  
                 if keypress and keyrelease and isrbxactive then
                     if not isrbxactive() then
-                        notify("Focus on the Roblox application to resume loading")
+                        notify("Focus on the Roblox application to resume game")
                         repeat task.wait() until isrbxactive()
                     end
                     keypress(0xBF)

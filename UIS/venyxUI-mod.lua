@@ -243,6 +243,7 @@ if game.PlaceId == 4581966615 then
                 local frame2 = frame1:FindFirstChildOfClass("Frame")
                 if frame2:FindFirstChild("Frame") then
                     if frame2.Frame.Text.Text == "*(@)*" then
+							print("tested")
                         frame2:Destroy()                        
                     end
                 end

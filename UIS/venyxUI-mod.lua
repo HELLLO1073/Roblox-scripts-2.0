@@ -242,8 +242,8 @@ if game.PlaceId == 4581966615 then
             if frame1 then
                 local frame2 = frame1:FindFirstChildOfClass("Frame")
                 if frame2:FindFirstChild("Frame") then
-                    if frame2.Frame.Text.Text == "*(!)*" then
-                        frame2:Destroy()
+                    if frame2.Frame.Text.Text == "*(@)*" then
+                        frame2:Destroy()                        
                     end
                 end
             end

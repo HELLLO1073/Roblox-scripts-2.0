@@ -236,7 +236,7 @@ if game.PlaceId == 4581966615 then
     end
 
 
-    local chatscroller = LocalPlayer.PlayerGui.Chat:WaitForChild("Frame").ChatChannelParentFrame["Frame_MessageLogDisplay"].Scroller
+    local chatscroller = game.Players.LocalPlayer.PlayerGui.Chat:WaitForChild("Frame").ChatChannelParentFrame["Frame_MessageLogDisplay"].Scroller
     chatscroller.ChildAdded:Connect(function(chatframe)
         if chatframe:IsA("Frame") then
             local textlabel = chatframe:WaitForChild("TextLabel")
@@ -247,7 +247,7 @@ if game.PlaceId == 4581966615 then
                 end
             end
         end
-    end)
+    end)    
 
     local bubblechat = game:GetService("CoreGui").BubbleChat
     bubblechat.ChildAdded:Connect(function(chatgui)

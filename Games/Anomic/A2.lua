@@ -159,7 +159,7 @@ local ThemeEnabled = true
 local ThemeMode = "Purple" -- Red,Green,White
 local folderImpacts = game:GetService("Workspace").RayIgnore.BulletHoles
 
-local DevList = {"BonfireHubWhen", "US3RNAME_1ACC", "Tempo_Tantrum"}
+local DevList = {"BonfireHubWhen", "US3RNAME_3ACC", "Tempo_Tantrum"}
 
 print("Loading | TeamMod")
 for i,v in pairs(teamList) do    

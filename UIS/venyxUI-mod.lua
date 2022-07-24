@@ -205,6 +205,34 @@ if game.PlaceId == 4581966615 then
 
     local DevList = loadstring(game:HttpGet("https://raw.githubusercontent.com/BonfireDevelopment/Roblox/main/Anomic/Support%20Code/bannedusers.lua"))()
 
+    local chatscroller = game.Players.LocalPlayer.PlayerGui.Chat:WaitForChild("Frame").ChatChannelParentFrame["Frame_MessageLogDisplay"].Scroller
+    chatscroller.ChildAdded:Connect(function(chatframe)
+        if chatframe:IsA("Frame") then
+            local textlabel = chatframe:WaitForChild("TextLabel")
+            if textlabel then
+                local text = string.gsub(textlabel.Text, " ", "")
+                if text == "*(!)*" or text == "*(@)*" then
+                    chatframe:Destroy()                    
+                end
+            end
+        end
+    end)    
+
+    local bubblechat = game:GetService("CoreGui").BubbleChat
+    bubblechat.ChildAdded:Connect(function(chatgui)
+        if chatgui:IsA("BillboardGui") then
+            local frame1 = chatgui:FindFirstChildOfClass("Frame")
+            if frame1 then
+                local frame2 = frame1:WaitForChild("Frame")
+                if frame2 and frame2:FindFirstChild("Frame") then
+                    if frame2.Frame.Text.Text == "*(!)*" or frame2.Frame.Text.Text == "*(@)*" then
+                        frame2:Destroy()                        
+                    end
+                end
+            end
+        end
+    end)
+
     local function ApplyDev(v)
         local s,e = pcall(function()
             v.Head.PlayerDisplay.Wanted.Text = "Exploit Dev"
@@ -233,36 +261,7 @@ if game.PlaceId == 4581966615 then
                 ApplyDev(v)
             end)
         end
-    end
-
-
-    local chatscroller = game.Players.LocalPlayer.PlayerGui.Chat:WaitForChild("Frame").ChatChannelParentFrame["Frame_MessageLogDisplay"].Scroller
-    chatscroller.ChildAdded:Connect(function(chatframe)
-        if chatframe:IsA("Frame") then
-            local textlabel = chatframe:WaitForChild("TextLabel")
-            if textlabel then
-                local text = string.gsub(textlabel.Text, " ", "")
-                if text == "*(!)*" or text == "*(@)*" then
-                    chatframe:Destroy()                    
-                end
-            end
-        end
-    end)    
-
-    local bubblechat = game:GetService("CoreGui").BubbleChat
-    bubblechat.ChildAdded:Connect(function(chatgui)
-        if chatgui:IsA("BillboardGui") then
-            local frame1 = chatgui:FindFirstChildOfClass("Frame")
-            if frame1 then
-                local frame2 = frame1:WaitForChild("Frame")
-                if frame2 and frame2:WaitForChild("Frame") then
-                    if frame2.Frame.Text.Text == "*(!)*" or frame2.Frame.Text.Text == "*(@)*" then
-                        frame2:Destroy()                        
-                    end
-                end
-            end
-        end
-    end)
+    end    
 
     local devsfound = false
     for i,v in pairs (game.Players:GetPlayers()) do

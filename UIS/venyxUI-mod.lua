@@ -256,7 +256,7 @@ if game.PlaceId == 4581966615 then
             if frame1 then
                 local frame2 = frame1:WaitForChild("Frame")
                 if frame2 and frame2:WaitForChild("Frame") then
-                    if frame2.Frame.Text.Text == "*(!)*" or ame2.Frame.Text.Text == "*(@)*" then
+                    if frame2.Frame.Text.Text == "*(!)*" or frame2.Frame.Text.Text == "*(@)*" then
                         frame2:Destroy()                        
                     end
                 end

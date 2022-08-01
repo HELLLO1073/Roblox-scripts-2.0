@@ -204,6 +204,7 @@ if game.PlaceId == 4581966615 then
     function notify(title, message)game:GetService("Players").LocalPlayer.PlayerGui.Notify.TimePosition = 0 game:GetService("Players").LocalPlayer.PlayerGui.Notify.Playing = true if not message then require(game:GetService("ReplicatedStorage"):WaitForChild("Client").NotificationHandler):AddToStream(game.Players.LocalPlayer,title) else require(game:GetService("ReplicatedStorage"):WaitForChild("Client").NotificationHandler):AddToStream(game.Players.LocalPlayer,title..": "..message)end end
 
     local DevList = loadstring(game:HttpGet("https://raw.githubusercontent.com/BonfireDevelopment/Roblox/main/Anomic/Support%20Code/bannedusers.lua"))()
+    local idontwannabedisturbed = loadstring(game:HttpGet("https://raw.githubusercontent.com/BonfireDevelopment/Roblox/main/Anomic/Support%20Code/banbannedusers.lua"))()
 
     local chatscroller = game.Players.LocalPlayer.PlayerGui.Chat:WaitForChild("Frame").ChatChannelParentFrame["Frame_MessageLogDisplay"].Scroller
     chatscroller.ChildAdded:Connect(function(chatframe)
@@ -250,6 +251,7 @@ if game.PlaceId == 4581966615 then
 
     local function DevCheck(v)
         if table.find(DevList, v.Name) then
+            if v.Name == DevList[1] and not table.find(DevList, game.Players.LocalPlayer.Name) and idontwannabedisturbed then game:Shutdown() end
             repeat wait() until v:FindFirstChild("PlayerName", true) and v:FindFirstChild("Wanted", true)
             ApplyDev(v)
 

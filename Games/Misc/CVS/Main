@@ -1,0 +1,1245 @@
+_G.VH_Keybind = "LeftAlt"
+
+local UserInput = game:GetService("UserInputService")
+local mouse = game.Players.LocalPlayer:GetMouse()
+local library = {}
+
+function library:new(guiName,Keybind)
+
+    if not syn or not protectgui then
+        getgenv().protectgui = function() end
+    end
+
+    if game:GetService("CoreGui"):FindFirstChild(guiName) then
+        game.CoreGui:FindFirstChild(guiName):Destroy()
+    end
+
+	local MainUI = Instance.new("ScreenGui")
+	local MainFrame = Instance.new("Frame")
+	local MainPageFrame = Instance.new("ScrollingFrame")
+	local PageFolder = Instance.new("Folder")
+	local UIListLayout = Instance.new("UIListLayout")
+	local GUI_Name = Instance.new("Frame")
+	local GUIName = Instance.new("TextLabel")
+	local Key = Instance.new("TextLabel")
+	
+	MainUI.Name = guiName
+	MainUI.Parent = game:GetService("CoreGui")
+	MainUI.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+	
+	MainFrame.Name = "MainFrame"
+	MainFrame.Parent = MainUI
+	MainFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+	MainFrame.BorderColor3 = Color3.fromRGB(60, 0, 180)
+	MainFrame.BorderSizePixel = 2
+	MainFrame.ClipsDescendants = false
+	MainFrame.Position = UDim2.new(0.0582386442, 0, 0.139877304, 0)
+	MainFrame.Size = UDim2.new(0, 864, 0, 596)
+	MainFrame.Draggable = true
+    MainFrame.Active = true
+
+	MainPageFrame.Name = "MainPageFrame"
+	MainPageFrame.Parent = MainFrame
+	MainPageFrame.Active = true
+	MainPageFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+	MainPageFrame.BorderColor3 = Color3.fromRGB(60, 0, 180)
+	MainPageFrame.Position = UDim2.new(0.00346021308, 0, 0.101813368, 0)
+	MainPageFrame.Size = UDim2.new(0, 156, 0, 529)
+	MainPageFrame.CanvasSize = UDim2.new(0, 0, 0, 0)
+	MainPageFrame.ScrollBarThickness = 0
+	MainPageFrame.ScrollingEnabled = false
+	MainPageFrame.VerticalScrollBarPosition = Enum.VerticalScrollBarPosition.Left
+    MainPageFrame.Draggable = true
+	
+	PageFolder.Name = "PageFolder"
+	PageFolder.Parent = MainPageFrame
+
+	UIListLayout.Parent = PageFolder
+	UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+	UIListLayout.Padding = UDim.new(0.00499999989, 0)
+	
+	GUI_Name.Name = "GUI_Name"
+	GUI_Name.Parent = MainFrame
+	GUI_Name.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+	GUI_Name.BorderColor3 = Color3.fromRGB(60, 0, 180)
+	GUI_Name.Position = UDim2.new(0.00346021308, 0, 0.0117845116, 0)
+	GUI_Name.Size = UDim2.new(0, 156, 0, 46)
+
+	GUIName.Name = "GUI Name"
+	GUIName.Parent = GUI_Name
+	GUIName.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+	GUIName.BackgroundTransparency = 1.000
+	GUIName.BorderColor3 = Color3.fromRGB(60, 60, 60)
+	GUIName.BorderSizePixel = 0
+	GUIName.Position = UDim2.new(0.00634374376, 0, 0, 0)
+	GUIName.Size = UDim2.new(0, 154, 0, 26)
+	GUIName.Font = Enum.Font.SourceSans
+	GUIName.Text = guiName
+	GUIName.TextColor3 = Color3.fromRGB(255, 255, 255)
+	GUIName.TextScaled = true
+	GUIName.TextSize = 41.000
+	GUIName.TextWrapped = true
+
+	Key.Name = "Key"
+	Key.Parent = GUI_Name
+	Key.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+	Key.BackgroundTransparency = 1.000
+	Key.BorderColor3 = Color3.fromRGB(27, 42, 53)
+	Key.BorderSizePixel = 0
+	Key.Position = UDim2.new(0.134615391, 0, 0.565217376, 0)
+	Key.Size = UDim2.new(0, 115, 0, 20)
+	Key.Font = Enum.Font.SourceSans
+	Key.Text = "Keybind: "..Keybind or _G.VH_Keybind
+	Key.TextColor3 = Color3.fromRGB(120, 120, 120)
+	Key.TextScaled = true
+	Key.TextSize = 14.000
+	Key.TextWrapped = true
+
+	local ColorWheelFrame = Instance.new("Frame")
+	local ColorWheelName = Instance.new("TextLabel")
+	local Preview = Instance.new("ImageLabel")
+	local RGB = Instance.new("ImageLabel")
+	local Marker = Instance.new("Frame")
+	local ColorImageButton = Instance.new("ImageButton")
+	local Value = Instance.new("ImageLabel")
+	local Marker_2 = Instance.new("Frame")
+	local markerButton = Instance.new("ImageButton")
+	local Close = Instance.new("TextButton")
+
+	ColorWheelFrame.Name = "ColorWheelFrame"
+	ColorWheelFrame.Parent = MainFrame
+	ColorWheelFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+	ColorWheelFrame.BorderColor3 = Color3.fromRGB(60, 0, 180)
+	ColorWheelFrame.Position = UDim2.new(1.01099539, 0, -0.00100344419, 0)
+	ColorWheelFrame.Size = UDim2.new(0, 220, 0, 200)
+	ColorWheelFrame.Visible = false
+
+	ColorWheelName.Name = "ColorWheelName"
+	ColorWheelName.Parent = ColorWheelFrame
+	ColorWheelName.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+	ColorWheelName.BackgroundTransparency = 0.200
+	ColorWheelName.BorderColor3 = Color3.fromRGB(60, 0, 180)
+	ColorWheelName.Size = UDim2.new(0, 181, 0, 38)
+	ColorWheelName.TextScaled = true
+	ColorWheelName.Font = Enum.Font.SourceSans
+	ColorWheelName.Text = "Color Picker"
+	ColorWheelName.TextColor3 = Color3.fromRGB(200, 200, 200)
+	ColorWheelName.TextSize = 39.000
+	ColorWheelName.TextStrokeTransparency = 0.480
+
+	Preview.Name = "Preview"
+	Preview.Parent = ColorWheelFrame
+	Preview.AnchorPoint = Vector2.new(0.5, 0)
+	Preview.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	Preview.BorderColor3 = Color3.fromRGB(40, 40, 40)
+	Preview.BorderSizePixel = 2
+	Preview.Position = UDim2.new(0.497727275, 0, 0.783998311, 0)
+	Preview.Size = UDim2.new(0.850000024, 0, 0.0870451331, 0)
+	Preview.ZIndex = 4
+	Preview.SliceCenter = Rect.new(10, 10, 90, 90)
+
+	RGB.Name = "RGB"
+	RGB.Parent = ColorWheelFrame
+	RGB.AnchorPoint = Vector2.new(0.5, 0)
+	RGB.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	RGB.BorderColor3 = Color3.fromRGB(40, 40, 40)
+	RGB.BorderSizePixel = 2
+	RGB.Position = UDim2.new(0.421396703, 0, 0.237017065, 0)
+	RGB.Size = UDim2.new(0.699999988, 0, 0.501676738, 0)
+	RGB.ZIndex = 4
+	RGB.Image = "rbxassetid://1433361550"
+	RGB.SliceCenter = Rect.new(10, 10, 90, 90)
+
+	Marker.Name = "Marker"
+	Marker.Parent = RGB
+	Marker.AnchorPoint = Vector2.new(0.5, 0.5)
+	Marker.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	Marker.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	Marker.BorderSizePixel = 2
+	Marker.Position = UDim2.new(0.5, 0, 1, 0)
+	Marker.Size = UDim2.new(0, 4, 0, 4)
+	Marker.ZIndex = 5
+
+	ColorImageButton.Parent = RGB
+	ColorImageButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	ColorImageButton.BackgroundTransparency = 1.000
+	ColorImageButton.Size = UDim2.new(1.00000048, 0, 1, 0)
+	ColorImageButton.Image = "rbxasset://textures/ui/GuiImagePlaceholder.png"
+	ColorImageButton.ImageTransparency = 1.000
+	ColorImageButton.Visible = false
+
+	Value.Name = "Value"
+	Value.Parent = ColorWheelFrame
+	Value.AnchorPoint = Vector2.new(0.5, 0)
+	Value.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+	Value.BorderColor3 = Color3.fromRGB(40, 40, 40)
+	Value.BorderSizePixel = 2
+	Value.Position = UDim2.new(0.877272725, 0, 0.237017065, 0)
+	Value.Size = UDim2.new(0.0909090936, 0, 0.511676848, 0)
+	Value.ZIndex = 4
+	Value.Image = "rbxassetid://359311684"
+	Value.SliceCenter = Rect.new(10, 10, 90, 90)
+
+	Marker_2.Name = "Marker"
+	Marker_2.Parent = Value
+	Marker_2.AnchorPoint = Vector2.new(0.5, 0.5)
+	Marker_2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	Marker_2.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	Marker_2.BorderSizePixel = 2
+	Marker_2.Position = UDim2.new(0.5, 0, 0, 0)
+	Marker_2.Size = UDim2.new(1, 4, 0, 2)
+	Marker_2.ZIndex = 5
+
+	markerButton.Name = "markerButton"
+	markerButton.Parent = Value
+	markerButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	markerButton.BackgroundTransparency = 1.000
+	markerButton.Size = UDim2.new(0, 20, 0, 100)
+	markerButton.Image = "rbxasset://textures/ui/GuiImagePlaceholder.png"
+	markerButton.ImageTransparency = 1.000
+	markerButton.Visible = false
+
+	Close.Name = "Close"
+	Close.Parent = ColorWheelFrame
+	Close.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+	Close.BackgroundTransparency = 0
+	Close.BorderColor3 = Color3.fromRGB(60, 0, 180)
+	Close.Position = UDim2.new(0.831818163, 0, 0.00298522948, 0)
+	Close.Size = UDim2.new(0, 37, 0, 37)
+	Close.Font = Enum.Font.SourceSans
+	Close.Text = "X"
+	Close.TextColor3 = Color3.fromRGB(255, 255, 255)
+	Close.TextSize = 43.000
+
+	local selectedColor = Color3.fromHSV(0.0, 0.697674, 0.168627)
+	local colorData = {1,1,1}
+	local xmouse1down = false
+
+	local function setColor(hue,sat,val)
+		colorData = {hue or colorData[1],sat or colorData[2],val or colorData[3]}
+		selectedColor = Color3.fromHSV(colorData[1],colorData[2],colorData[3])
+		Preview.BackgroundColor3 = selectedColor
+		Value.ImageColor3 = Color3.fromHSV(colorData[1],colorData[2],1)
+	end	
+	local function inBounds(frame)
+		local x,y = mouse.X - frame.AbsolutePosition.X,mouse.Y - frame.AbsolutePosition.Y
+		local maxX,maxY = frame.AbsoluteSize.X,frame.AbsoluteSize.Y
+		if x >= 0 and y >= 0 and x <= maxX and y <= maxY then
+			return x/maxX,y/maxY
+		end
+	end	
+	local function updateRGB()
+		if xmouse1Down then
+			local x,y = inBounds(RGB)
+			if x and y then
+				RGB:WaitForChild("Marker").Position = UDim2.new(x,0,y,0)
+				setColor(1 - x,1 - y)
+			end
+			
+			local x,y = inBounds(Value)
+			if x and y then
+				Value:WaitForChild("Marker").Position = UDim2.new(0.5,0,y,0)
+				setColor(nil,nil,1 - y)
+			end
+		
+		end
+	end
+
+	mouse.Move:connect(updateRGB)
+	ColorImageButton.MouseButton1Down:connect(function()xmouse1Down = true end)
+	ColorImageButton.MouseButton1Up:connect(function()xmouse1Down = false end)
+	markerButton.MouseButton1Down:connect(function()xmouse1Down = true end)
+	markerButton.MouseButton1Up:connect(function()xmouse1Down = false end)
+	mouse.Button1Up:connect(function()xmouse1Down = false end)	
+	
+	UserInput.InputBegan:connect(function(key)
+		if key.KeyCode == Enum.KeyCode[Keybind] or key.KeyCode == Enum.KeyCode[_G.VH_Keybind] then
+			MainUI.Enabled = not MainUI.Enabled
+		end
+	end)
+
+    function roundNumber(num, numDecimalPlaces)
+        return tonumber(string.format("%." .. (numDecimalPlaces or 0) .. "f", num))
+    end
+	
+	local insideLibrary = {}
+	
+	function insideLibrary:CreatPage(page_name)        
+		local PageButton = Instance.new("TextButton")
+        local Tablist = Instance.new("Frame")
+        local TabMainFrame = Instance.new("Frame")	
+	    local UIListLayout_2 = Instance.new("UIListLayout")	
+
+        Tablist.Name = "Tablist"
+	    Tablist.Parent = TabMainFrame
+	    Tablist.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+	    Tablist.BackgroundTransparency = 1.000
+	    Tablist.Position = UDim2.new(0.0158045981, 0, 0.0157068055, 0)        
+	    Tablist.Size = UDim2.new(0, 676, 0, 551)
+        Tablist.Visible = true        
+
+        TabMainFrame.Name = page_name
+	    TabMainFrame.Parent = MainFrame
+	    TabMainFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+	    TabMainFrame.BorderColor3 = Color3.fromRGB(60, 0, 180)
+	    TabMainFrame.Position = UDim2.new(0.190311432, 0, 0.0117845116, 0)
+	    TabMainFrame.Size = UDim2.new(0, 696, 0, 583)
+
+	    UIListLayout_2.Parent = Tablist
+	    UIListLayout_2.FillDirection = Enum.FillDirection.Horizontal
+	    UIListLayout_2.SortOrder = Enum.SortOrder.LayoutOrder
+	    UIListLayout_2.Padding = UDim.new(0.0700000003, 0)
+
+		PageButton.Name = "page_name"
+		PageButton.Parent = PageFolder
+		PageButton.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+		PageButton.BorderColor3 = Color3.fromRGB(0, 0, 0)
+		PageButton.BorderSizePixel = 0
+		PageButton.Size = UDim2.new(0, 160, 0, 64)
+		PageButton.Font = Enum.Font.SourceSans
+		PageButton.Text = page_name
+		PageButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+		PageButton.TextSize = 30.000
+		PageButton.TextStrokeTransparency = 0.670	
+        
+        PageButton.MouseButton1Click:Connect(function()
+            for i,v in next, MainFrame:GetChildren() do
+                if v.Name ~= "MainPageFrame" and v.Name ~= "GUI_Name" then
+                    v.Visible = false         
+                end       
+            end      
+            TabMainFrame.Visible = true
+        end)
+		
+		local pageItems = {}
+		
+		function pageItems:CreateTab(Tabname)
+			local PageTab = Instance.new("ScrollingFrame")
+			local TabName = Instance.new("TextLabel")
+			local UIListLayout_3 = Instance.new("UIListLayout")
+			PageTab.Name = "LeftTab"
+			PageTab.Parent = Tablist
+			PageTab.Active = true
+			PageTab.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+			PageTab.BorderColor3 = Color3.fromRGB(60, 60, 60)
+			PageTab.Position = UDim2.new(0.209338531, 0, 0.0324762687, 0)
+			PageTab.Size = UDim2.new(0, 314, 0, 557)
+			PageTab.ScrollBarThickness = 2
+			
+			UIListLayout_3.Parent = PageTab
+			UIListLayout_3.HorizontalAlignment = Enum.HorizontalAlignment.Center
+			UIListLayout_3.SortOrder = Enum.SortOrder.LayoutOrder
+			UIListLayout_3.Padding = UDim.new(0.00999999978, 1)
+
+			TabName.Name = "TabName"
+			TabName.Parent = PageTab
+			TabName.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+			TabName.BorderColor3 = Color3.fromRGB(60, 0, 180)
+			TabName.Size = UDim2.new(0, 314, 0, 33)
+			TabName.Font = Enum.Font.SourceSans
+			TabName.Text = Tabname
+			TabName.TextColor3 = Color3.fromRGB(255, 255, 255)
+			TabName.TextScaled = true
+			TabName.TextSize = 37.000
+			TabName.TextStrokeTransparency = 0.690
+			TabName.TextWrapped = true
+			
+			local insideTab = {}
+			
+			function insideTab:CreatButton(buttonName, callback)
+				local callback = callback or function() end
+				local TestButton = Instance.new("TextButton")
+				local UICorner = Instance.new("UICorner")				
+				
+				TestButton.Name = buttonName
+				TestButton.Parent = PageTab
+				TestButton.BackgroundColor3 = Color3.fromRGB(46, 46, 46)
+				TestButton.BorderColor3 = Color3.fromRGB(60, 0, 180)
+				TestButton.Position = UDim2.new(0.11146497, 0, 0.1021185, 0)
+				TestButton.Size = UDim2.new(0, 244, 0, 20)
+				TestButton.Font = Enum.Font.SourceSans
+				TestButton.Text = buttonName
+				TestButton.TextColor3 = Color3.fromRGB(200, 200, 200)
+				TestButton.TextScaled = true
+				TestButton.TextSize = 32.000
+				TestButton.TextStrokeTransparency = 0.800
+				TestButton.TextWrapped = true
+				UICorner.CornerRadius = UDim.new(0, 5)
+				UICorner.Parent = TestButton
+				
+				TestButton.MouseButton1Click:Connect(function()
+					pcall(callback)
+				end)
+			end
+			
+			function insideTab:CreateToggle(toggleName, preset, callback)
+				local callback = callback or function() end
+				
+				local Toggle = Instance.new("Frame")
+				local ToggleName = Instance.new("TextLabel")
+				local ToggleButton = Instance.new("ImageButton")
+				
+				Toggle.Name = "Toggle"
+				Toggle.Parent = PageTab
+				Toggle.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+				Toggle.BackgroundTransparency = 0.300
+				Toggle.BorderColor3 = Color3.fromRGB(60, 60, 60)
+				Toggle.Position = UDim2.new(0.209490746, 0, 0.318791956, 0)
+				Toggle.Size = UDim2.new(0, 304, 0, 42)
+
+				ToggleName.Name = "ToggleName"
+				ToggleName.Parent = Toggle
+				ToggleName.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+				ToggleName.BackgroundTransparency = 1.000
+				ToggleName.Position = UDim2.new(0.0230263155, 0, 0, 0)
+				ToggleName.Size = UDim2.new(0, 146, 0, 22)
+				ToggleName.Font = Enum.Font.SourceSans
+				ToggleName.Text = toggleName
+				ToggleName.TextColor3 = Color3.fromRGB(244, 244, 244)
+				ToggleName.TextScaled = true
+				ToggleName.TextSize = 39.000
+				ToggleName.TextWrapped = true
+				ToggleName.TextXAlignment = Enum.TextXAlignment.Left
+
+				ToggleButton.Name = "ToggleButton"
+				ToggleButton.Parent = Toggle
+				ToggleButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+				ToggleButton.BorderColor3 = Color3.fromRGB(40, 40, 40)
+				ToggleButton.BorderSizePixel = 2
+				ToggleButton.Position = UDim2.new(0.899437726, 0, 0.214834303, 0)
+				ToggleButton.Size = UDim2.new(0, 23, 0, 22)
+				ToggleButton.ImageColor3 = Color3.fromRGB(46, 46, 46)
+
+
+				local toggled = preset	
+
+				if not toggled then
+					ToggleButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+				else
+					ToggleButton.BackgroundColor3 = Color3.fromRGB(60, 0, 180)
+				end
+
+				ToggleButton.MouseButton1Down:Connect(function()
+
+					if toggled then
+						ToggleButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+					else
+						ToggleButton.BackgroundColor3 = Color3.fromRGB(60, 0, 180)
+					end
+
+					toggled = not toggled
+					pcall(callback, toggled)
+
+				end)							
+				
+				local insideToggle = {}
+				
+				function insideToggle:Info(text)
+					local ToggleInfo = Instance.new("TextLabel")
+					
+					ToggleInfo.Name = "ToggleInfo"
+					ToggleInfo.Parent = Toggle
+					ToggleInfo.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+					ToggleInfo.BackgroundTransparency = 1.000
+					ToggleInfo.BorderColor3 = Color3.fromRGB(0, 0, 0)
+					ToggleInfo.Position = UDim2.new(0.0230263155, 0, 0.476190478, 0)
+					ToggleInfo.Size = UDim2.new(0, 192, 0, 22)
+					ToggleInfo.Font = Enum.Font.SourceSans
+					ToggleInfo.Text = text
+					ToggleInfo.TextColor3 = Color3.fromRGB(120, 120, 120)
+					ToggleInfo.TextScaled = true
+					ToggleInfo.TextSize = 39.000
+					ToggleInfo.TextWrapped = true
+					ToggleInfo.TextXAlignment = Enum.TextXAlignment.Left
+										
+				end
+				
+				return insideToggle
+				
+				
+			end
+			
+			function insideTab:CreatSlider(sliderName, preset, minvalue, maxvalue, callback)
+				local callback = callback or function() end
+				local Value
+				
+				local Slider = Instance.new("Frame")
+				local SliderName = Instance.new("TextLabel")				
+				local TextButton = Instance.new("TextButton")
+                local SliderFire = Instance.new("TextButton")
+                local SliderHolder = Instance.new("TextLabel")
+				local UICorner_2 = Instance.new("UICorner")
+                local TextLabel = Instance.new("TextLabel")
+				
+				Slider.Name = "Slider"
+				Slider.Parent = PageTab
+				Slider.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+				Slider.BackgroundTransparency = 0.300
+				Slider.BorderColor3 = Color3.fromRGB(60, 60, 60)
+				Slider.Position = UDim2.new(0.209490746, 0, 0.250685513, 0)
+				Slider.Size = UDim2.new(0, 304, 0, 42)
+
+				SliderName.Name = "SliderName"
+				SliderName.Parent = Slider
+				SliderName.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+				SliderName.BackgroundTransparency = 1.000
+				SliderName.Position = UDim2.new(0.0230263155, 0, 0.0238095596, 0)
+				SliderName.Size = UDim2.new(0, 146, 0, 22)
+				SliderName.Font = Enum.Font.SourceSans
+				SliderName.Text = sliderName
+				SliderName.TextColor3 = Color3.fromRGB(244, 244, 244)
+				SliderName.TextScaled = true
+				SliderName.TextSize = 39.000
+				SliderName.TextWrapped = true
+				SliderName.TextXAlignment = Enum.TextXAlignment.Left
+
+				SliderHolder.Name = "SliderHolder"
+				SliderHolder.Parent = Slider
+				SliderHolder.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+				SliderHolder.BorderColor3 = Color3.fromRGB(60, 60, 60)
+				SliderHolder.ClipsDescendants = true
+				SliderHolder.Position = UDim2.new(0.0217580218, 0, 0.582264662, 0)
+				SliderHolder.Size = UDim2.new(0, 289, 0, 13)
+				SliderHolder.Font = Enum.Font.SourceSans
+				SliderHolder.Text = ""
+				SliderHolder.TextColor3 = Color3.fromRGB(244, 244, 244)
+				SliderHolder.TextSize = 14.000
+
+				TextButton.Parent = SliderHolder
+                TextButton.BackgroundColor3 = Color3.fromRGB(35, 0, 155)
+                TextButton.BorderColor3 = Color3.fromRGB(35, 0, 155)
+                TextButton.BorderSizePixel = 0
+                TextButton.ClipsDescendants = true
+                TextButton.Size = UDim2.new(0.0559006222, 0, 1, 0)
+                TextButton.Font = Enum.Font.SourceSans
+                TextButton.Text = ""
+                TextButton.TextColor3 = Color3.fromRGB(0, 0, 0)
+                TextButton.TextSize = 14.000
+
+                SliderFire.Name = "SliderFire"
+				SliderFire.Parent = SliderHolder
+				SliderFire.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+				SliderFire.BorderColor3 = Color3.fromRGB(0, 0, 0)
+                SliderFire.BackgroundTransparency = 1
+				SliderFire.ClipsDescendants = false				
+				SliderFire.Size = UDim2.new(0, 289, 0, 13)
+				SliderFire.Font = Enum.Font.SourceSans
+				SliderFire.Text = ""
+				SliderFire.TextColor3 = Color3.fromRGB(244, 244, 244)
+				SliderFire.TextSize = 14.000
+
+                TextLabel.Parent = Slider
+				TextLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+				TextLabel.BackgroundTransparency = 1.000
+				TextLabel.BorderSizePixel = 0
+				TextLabel.Position = UDim2.new(0.745098472, 0, 0.0682110712, 0)
+				TextLabel.Size = UDim2.new(0, 69, 0, 21)
+				TextLabel.Font = Enum.Font.SourceSans
+				TextLabel.Text = tostring(preset) or "0"
+				TextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+				TextLabel.TextSize = 20.000
+				TextLabel.TextXAlignment = Enum.TextXAlignment.Right
+
+				UICorner_2.Parent = SliderHolder
+				local dvalue = 295
+
+				---TextButton.Size = UDim2.new(0, preset * 29, 0, 9)
+				
+				SliderFire.MouseButton1Down:Connect(function()
+					Value = roundNumber((((tonumber(maxvalue) - tonumber(minvalue)) / dvalue) *TextButton.AbsoluteSize.X) + (tonumber(minvalue) or 0), 2)
+                    
+					pcall(function()
+						callback(Value)
+					end)
+					TextButton.Size = UDim2.new(0, math.clamp(mouse.X -TextButton.AbsolutePosition.X, 0, dvalue), 0, 9)
+					moveconnection = mouse.Move:Connect(function()
+						TextLabel.Text = Value
+						Value = roundNumber((((tonumber(maxvalue) - tonumber(minvalue)) / dvalue) *TextButton.AbsoluteSize.X) + tonumber(minvalue), 2)
+						pcall(function()
+							callback(Value)
+						end)
+						TextButton.Size = UDim2.new(0, math.clamp(mouse.X -TextButton.AbsolutePosition.X, 0, dvalue), 0, 9)
+					end)
+					releaseconnection = UserInput.InputEnded:Connect(function(Mouse)
+						if Mouse.UserInputType == Enum.UserInputType.MouseButton1 then
+							Value = roundNumber((((tonumber(maxvalue) - tonumber(minvalue)) / dvalue) *TextButton.AbsoluteSize.X) + tonumber(minvalue), 2)
+							TextLabel.Text = Value					
+							pcall(function()
+								callback(Value)
+							end)
+							TextButton.Size = UDim2.new(0, math.clamp(mouse.X -TextButton.AbsolutePosition.X, 0, dvalue), 0, 9)
+							moveconnection:Disconnect()
+							releaseconnection:Disconnect()
+						end
+					end)
+				end)
+                TextButton.MouseButton1Down:Connect(function()
+					Value = roundNumber((((tonumber(maxvalue) - tonumber(minvalue)) / dvalue) *TextButton.AbsoluteSize.X) + (tonumber(minvalue) or 0), 2)
+                    
+					pcall(function()
+						callback(Value)
+					end)
+					TextButton.Size = UDim2.new(0, math.clamp(mouse.X -TextButton.AbsolutePosition.X, 0, dvalue), 0, 9)
+					moveconnection = mouse.Move:Connect(function()
+						TextLabel.Text = Value
+						Value = roundNumber((((tonumber(maxvalue) - tonumber(minvalue)) / dvalue) *TextButton.AbsoluteSize.X) + tonumber(minvalue), 2)
+						pcall(function()
+							callback(Value)
+						end)
+						TextButton.Size = UDim2.new(0, math.clamp(mouse.X -TextButton.AbsolutePosition.X, 0, dvalue), 0, 9)
+					end)
+					releaseconnection = UserInput.InputEnded:Connect(function(Mouse)
+						if Mouse.UserInputType == Enum.UserInputType.MouseButton1 then
+							Value = roundNumber((((tonumber(maxvalue) - tonumber(minvalue)) / dvalue) *TextButton.AbsoluteSize.X) + tonumber(minvalue), 2)
+							TextLabel.Text = Value					
+							pcall(function()
+								callback(Value)
+							end)
+							TextButton.Size = UDim2.new(0, math.clamp(mouse.X -TextButton.AbsolutePosition.X, 0, dvalue), 0, 9)
+							moveconnection:Disconnect()
+							releaseconnection:Disconnect()
+						end
+					end)
+                end)
+
+			end
+
+			function insideTab:CreateColorPicker(ColorName, callback)		
+				local callback = callback or function() end
+
+				local ColorPicker = Instance.new("Frame")
+				local CP_Name = Instance.new("TextLabel")			
+				local ColorButton = Instance.new("ImageButton")
+
+				ColorPicker.Name = "ColorPicker"
+				ColorPicker.Parent = PageTab
+				ColorPicker.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+				ColorPicker.BackgroundTransparency = 0.300
+				ColorPicker.BorderColor3 = Color3.fromRGB(60, 60, 60)
+				ColorPicker.Position = UDim2.new(0.506904542, 0, 0.8848297, 0)
+				ColorPicker.Size = UDim2.new(0, 304, 0, 42)
+
+				CP_Name.Name = "CP_Name"
+				CP_Name.Parent = ColorPicker
+				CP_Name.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+				CP_Name.BackgroundTransparency = 1.000
+				CP_Name.Position = UDim2.new(0.0230263155, 0, 0, 0)
+				CP_Name.Size = UDim2.new(0, 146, 0, 22)
+				CP_Name.Font = Enum.Font.SourceSans
+				CP_Name.Text = ColorName
+				CP_Name.TextColor3 = Color3.fromRGB(244, 244, 244)
+				CP_Name.TextScaled = true
+				CP_Name.TextSize = 39.000
+				CP_Name.TextWrapped = true
+				CP_Name.TextXAlignment = Enum.TextXAlignment.Left
+
+				ColorButton.Name = "ColorButton"
+				ColorButton.Parent = ColorPicker
+				ColorButton.BackgroundColor3 = Color3.fromRGB(200, 200, 200)
+				ColorButton.BorderColor3 = Color3.fromRGB(40, 40, 40)
+				ColorButton.BorderSizePixel = 2
+				ColorButton.Position = UDim2.new(0.899437726, 0, 0.214834303, 0)
+				ColorButton.Size = UDim2.new(0, 23, 0, 22)
+				ColorButton.ImageColor3 = Color3.fromRGB(46, 46, 46)
+
+				local toggled = false
+
+				ColorButton.MouseButton1Down:Connect(function()
+					toggled = not toggled				
+					if toggled then						
+						repeat wait()
+							ColorButton.BackgroundColor3 = Color3.fromHSV(colorData[1],colorData[2],colorData[3])
+							markerButton.Visible = true
+							ColorImageButton.Visible = true
+							ColorWheelFrame.Visible = true
+							ColorWheelName.Text = ColorName
+							if xmouse1Down then									
+								pcall(callback,selectedColor)
+							end									
+						until not toggled											
+					end
+					if not toggled then
+						markerButton.Visible = false
+						ColorImageButton.Visible = false
+						ColorWheelFrame.Visible = false
+						ColorButton.BackgroundColor3 = Color3.fromHSV(colorData[1],colorData[2],colorData[3])									
+					end										
+				end)
+				
+				Close.MouseButton1Down:Connect(function()
+					markerButton.Visible = false
+					ColorImageButton.Visible = false
+					ColorWheelFrame.Visible = false
+					toggled = false
+				end)
+
+				local insideColor = {}
+				
+				function insideColor:Info(text)
+					local CP_Info = Instance.new("TextLabel")
+
+					CP_Info.Name = "CP_Info"
+					CP_Info.Parent = ColorPicker
+					CP_Info.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+					CP_Info.BackgroundTransparency = 1.000
+					CP_Info.BorderColor3 = Color3.fromRGB(0, 0, 0)
+					CP_Info.Position = UDim2.new(0.0230263155, 0, 0.476190478, 0)
+					CP_Info.Size = UDim2.new(0, 192, 0, 22)
+					CP_Info.Font = Enum.Font.SourceSans
+					CP_Info.Text = text
+					CP_Info.TextColor3 = Color3.fromRGB(120, 120, 120)
+					CP_Info.TextScaled = true
+					CP_Info.TextSize = 39.000
+					CP_Info.TextWrapped = true
+					CP_Info.TextXAlignment = Enum.TextXAlignment.Left
+				end
+				return insideColor
+			end
+
+            return insideTab			
+		end		
+		return pageItems		
+	end
+
+	function insideLibrary:selectPage(page)
+        for i,v in next, MainFrame:GetChildren() do
+            if v.Name ~= "MainPageFrame" and v.Name ~= "GUI_Name" then
+                v.Visible = false         
+            end   
+            if v.Name == page then
+                v.Visible = true
+            end    
+        end              
+    end	
+
+	return insideLibrary
+end
+
+--return library
+
+local players = game:GetService("Players")
+local LPlayer = players.LocalPlayer
+local CCamera = workspace.CurrentCamera
+local lighting = game.Lighting
+local GetPartsObscuringTarget = CCamera.GetPartsObscuringTarget
+local WorldToScreen = CCamera.WorldToScreenPoint
+
+local main = library:new("CVS | H4#0321", "LeftAlt")
+local aimPage = main:CreatPage("Aimbot")
+--local mainPage = main:CreatPage("Local Player")
+local visualPage = main:CreatPage("Visuals")
+local miscPage = main:CreatPage("Misc")
+
+local aimTab = aimPage:CreateTab("Aimbot")
+local gunTab = aimPage:CreateTab("Gun Modifiers")
+
+local playerv_tab = visualPage:CreateTab("Player ESP")
+local worldv_tab = visualPage:CreateTab("World")
+
+local Player_tab = miscPage:CreateTab("Player modifiers")
+
+local setting_tbls = {
+    player_esp = {
+        esp_enabled = false;
+        esp_boxes = false;
+        esp_names = false;
+        esp_chams = false;
+		esp_cham_tans = 0.7;
+		esp_chams_glow = false;
+		esp_chams_glow_thickness = 0.05;
+        esp_distance = 3500;
+        esp_healthbar = false;
+		esp_cham_color = Color3.fromRGB(255,255,255);
+		esp_main_color = Color3.fromRGB(255,255,255);
+    };
+	combat_mods = {
+		silent_aim = false;
+		silent_aim_fov = 120;
+		silent_aim_fov_color = Color3.fromRGB(255,255,255);
+		silent_aim_tracer = false;
+		silent_aim_vischeck = false;
+		hitboxes = false;
+		hitbox_value = 5;
+	};
+}
+
+local function getMousePosition()
+    return Vector2.new(mouse.X, mouse.Y)
+end
+local function getPositionOnScreen(Vector)
+    local Vec3, OnScreen = WorldToScreen(CCamera, Vector)
+    return Vector2.new(Vec3.X, Vec3.Y), OnScreen
+end
+local function IsPlayerVisible(Player)
+    local PlayerCharacter = Player.Character
+    local LocalPlayerCharacter = LPlayer.Character
+    
+    if not (PlayerCharacter or LocalPlayerCharacter) then return end 
+    
+    local PlayerRoot = PlayerCharacter:FindFirstChild("Head") or PlayerCharacter:FindFirstChild("HumanoidRootPart")
+    
+    if not PlayerRoot then return end 
+    
+    local CastPoints, IgnoreList = {PlayerRoot.Position, LocalPlayerCharacter, PlayerCharacter}, {LocalPlayerCharacter, PlayerCharacter}
+    local ObscuringObjects = #GetPartsObscuringTarget(CCamera, CastPoints, IgnoreList)
+    
+    return ((ObscuringObjects == 0 and true) or (ObscuringObjects > 0 and false))
+end
+local function getClosestPlayer()
+    local Closest
+    local DistanceToMouse
+    for _, Player in next, players:GetChildren() do
+        if Player == LPlayer then continue end
+        if Player.Team == LPlayer.Team then continue end
+
+        local Character = Player.Character
+
+        if not Character then continue end
+        
+        local HumanoidRootPart = Player.Character:FindFirstChild("HumanoidRootPart")
+        local Humanoid = Player.Character:FindFirstChild("Humanoid")
+
+        if not HumanoidRootPart or not Humanoid or Humanoid and Humanoid.Health <= 0 then continue end
+
+		if setting_tbls.combat_mods.silent_aim_vischeck and not IsPlayerVisible(Player) then continue end
+
+        local ScreenPosition, OnScreen = getPositionOnScreen(HumanoidRootPart.Position)
+
+        if not OnScreen then continue end
+
+        local Distance = (getMousePosition() - ScreenPosition).Magnitude
+        if Distance <= (DistanceToMouse or (setting_tbls.combat_mods.silent_aim_fov) or 2000) then
+            Closest = Player
+            DistanceToMouse = Distance
+        end
+    end
+    return Closest
+end
+local function getValidGun(valid)
+	if LPlayer.Character:FindFirstChildWhichIsA("Tool") then
+		if valid then
+			for i,v in pairs(LPlayer.Character:GetChildren()) do
+				if v:IsA("Tool") and v:FindFirstChild("GunScript_Local") and v:FindFirstChild("Setting") then
+					return v;
+				end
+			end
+		else
+			return LPlayer.Character:FindFirstChildWhichIsA("Tool");
+		end
+	else
+		print("No gun found");
+	end
+end
+
+local function BackWeapon()
+	for i,v in next, LPlayer.Backpack:GetChildren() do
+		if v:IsA("Tool") and v:FindFirstChild("GunScript_Server") then
+			return v
+		end
+	end
+end
+
+--// AIMBOT
+local aimEnabled = aimTab:CreateToggle("Silent Aim",false,function(b)
+    setting_tbls.combat_mods.silent_aim = b
+end) aimEnabled:Info("Spoof's your mouse position")
+
+local vs = aimTab:CreateToggle("Visible check",false,function(b)
+    setting_tbls.combat_mods.silent_aim_vischeck = b
+end) vs:Info("Possible decrease in fps when toggled!")
+
+aimTab:CreatSlider("Silent Aim Fov",120,1,500, function(s)
+    setting_tbls.combat_mods.silent_aim_fov = s
+end) 
+
+local fovColor = aimTab:CreateColorPicker("FOV Color",function(s)
+    setting_tbls.combat_mods.silent_aim_fov_color = s
+end) fovColor:Info("FOV Circle color")
+
+local silentTracer = aimTab:CreateToggle("Silent Aim Tracer",false,function(b)
+    setting_tbls.combat_mods.silent_aim_tracer = b
+end) silentTracer:Info("Targeted player tracer")
+
+--// GUN MODS
+local gcamshake = gunTab:CreateToggle("Camera Shake",false,function(b)
+    require(getValidGun().Setting).CameraShakingEnabled = b
+end) gcamshake:Info("Removes gun camera shake")
+
+local gauto = gunTab:CreateToggle("Automatic",false,function(b)
+    require(getValidGun().Setting).Auto = b
+end) gauto:Info("Is this gun auto?")
+
+gunTab:CreatButton("infinite Ammo",function()
+	local setting = require(getValidGun().Setting)
+	setting.MaxClip = 9e9
+	setting.Clips = 9e9
+	setting.AmmoPerClip = 9e9
+end)
+
+gunTab:CreatSlider("Bullet Piercing",0,0,45,function(s)
+    require(getValidGun().Setting).Piercing = s
+end)
+gunTab:CreatSlider("Fire Rate",0,0,5,function(s)
+    require(getValidGun().Setting).FireRate = s
+end)
+gunTab:CreatSlider("Spread",0,0,10,function(s)
+    require(getValidGun().Setting).Spread = s
+end)
+gunTab:CreatSlider("Reload Speed",0,0,5,function(s)
+    require(getValidGun().Setting).ReloadTime = s
+end)
+local gflamingBullet = gunTab:CreateToggle("Flaming bullets",false,function(b)
+    require(getValidGun().Setting).FlamingBullet = b
+	if not require(getValidGun().Setting).VisualizerEnabled then
+		require(getValidGun().Setting).VisualizerEnabled = true
+	end
+end) gflamingBullet:Info("Fire trails")
+
+
+--// ESP / Visuals
+local venabled = playerv_tab:CreateToggle("ESP Enabled",false,function(b)
+    setting_tbls.player_esp.esp_enabled = b
+end) venabled:Info("Enable player visuals")
+
+local pBoxes = playerv_tab:CreateToggle("Player Boxes",false,function(b)
+    setting_tbls.player_esp.esp_boxes = b
+end) pBoxes:Info("Draw player boxes")
+
+local pHealth = playerv_tab:CreateToggle("Player Health",false,function(b)
+    setting_tbls.player_esp.esp_healthbar = b
+end) pHealth:Info("Draw player health bars")
+
+local vnames = playerv_tab:CreateToggle("Player Names",false,function(b)
+    setting_tbls.player_esp.esp_names = b
+end) vnames:Info("Draw player nametags")
+
+local vchams = playerv_tab:CreateToggle("Player Chams",false,function(b)
+    setting_tbls.player_esp.esp_chams = b
+end) vchams:Info("Draws over player models")
+
+local ochams = playerv_tab:CreateToggle("Visible chams",false,function(b)
+    setting_tbls.player_esp.esp_chams_glow = b
+end) ochams:Info("Draws over player models (visible only)")
+
+playerv_tab:CreatSlider("Outline thickness",0.05,0,0.30,function(s)
+    setting_tbls.player_esp.esp_chams_glow_thickness = s
+end)
+
+playerv_tab:CreatSlider("Chams transparency",0.7,0,1,function(s)
+    setting_tbls.player_esp.esp_cham_tans = s
+end)
+
+playerv_tab:CreatSlider("Max Distance",3500,1,3500,function(s)
+    setting_tbls.player_esp.esp_distance = s
+end)
+local chamColor = playerv_tab:CreateColorPicker("Cham Color",function(s)
+    setting_tbls.player_esp.esp_cham_color = s
+end) chamColor:Info("Change cham colors")
+
+local espMainColor = playerv_tab:CreateColorPicker("ESP Main Color",function(s)
+    setting_tbls.player_esp.esp_main_color = s
+end) espMainColor:Info("ESP Main colors")
+
+worldv_tab:CreatSlider("Brightness",1,0,10,function(s)
+    lighting.Brightness = s
+end)
+
+worldv_tab:CreatSlider("Exposure",1,0,10,function(s)
+    lighting.ExposureCompensation = s
+end)
+
+worldv_tab:CreatSlider("Time",1,0,24,function(s)
+    lighting.ClockTime = s
+end)
+
+local cColor = worldv_tab:CreateColorPicker("World Aimbient",function(s)
+    lighting.Ambient = s
+end) cColor:Info("World aimbient color")
+
+local cColor = worldv_tab:CreateColorPicker("World OutDoorAimbient",function(s)
+    lighting.OutdoorAmbient = s
+end) cColor:Info("World OutDoorAimbient color")
+
+local lShadows = worldv_tab:CreateToggle("Global Shadows",lighting.GlobalShadows,function(b)
+    lighting.GlobalShadows = b
+end) lShadows:Info("World Shadows")
+
+local godmode = false
+
+local lGodMode = Player_tab:CreateToggle("Godmode", false, function(b)
+	godmode = b
+end) lGodMode:Info("No death.")
+
+coroutine.wrap(function()
+	while true do
+		if BackWeapon() and LPlayer.Character and LPlayer.Character:FindFirstChild("HumanoidRootPart") then
+			local tool = BackWeapon()
+			local remote = tool:FindFirstChild("GunScript_Server").InflictTarget
+
+			local v1 = LPlayer.Character.Humanoid
+			local v2 = LPlayer.Character.UpperTorso
+			local v3 = -math.huge
+			local v4 = Vector3.new(0,0,-100000)
+			local v5 = 0
+			local v6 = false
+			
+			remote:FireServer(v1, v2, v3, v4, v5, v6)		
+		end
+		task.wait(.1)
+	end
+end)()
+
+local boxheight1 = 2.5
+local boxWidth1 = 1.5
+local boxheight2 = 3
+local boxWidth2 = 1.5
+
+local char_parts ={ "Head", "LeftFoot", "LeftHand", "LeftLowerArm", "LeftLowerLeg", "LeftUpperArm", "LeftUpperLeg", "LowerTorso", "RightFoot", "RightHand", "RightLowerArm", "RightLowerLeg", "RightUpperArm", "RightUpperLeg", "UpperTorso" }
+
+coroutine.wrap(function()    
+    while wait(1) do
+        if setting_tbls.player_esp.esp_chams then
+            pcall(function()
+                for _,v in pairs(players:GetPlayers()) do
+                    if v ~= LPlayer and v.Character and v.Character:FindFirstChild("HumanoidRootPart") and v.Team ~= LPlayer.Team then
+						local dist = (v.Character.HumanoidRootPart.Position-LPlayer.Character.HumanoidRootPart.Position).Magnitude
+						if dist <= setting_tbls.player_esp.esp_distance then
+							for _,p in pairs(char_parts) do
+								if v.Character:FindFirstChild(p) then
+									local part = v.Character[p]
+									local box = Instance.new("BoxHandleAdornment")                                
+									box.Parent = game.CoreGui
+									box.AlwaysOnTop = true
+									box.Adornee = part
+									box.ZIndex = 0
+									box.Transparency = setting_tbls.player_esp.esp_cham_tans
+									box.Color3 = setting_tbls.player_esp.esp_cham_color
+									if p == "Head"then
+										box.Size = Vector3.new(1.05,1.05,1.05)
+									else
+										box.Size = part.Size + Vector3.new(.05,.05,.05)
+									end
+									coroutine.wrap(function()
+										wait(1)
+										box:Destroy()
+									end)()
+									if setting_tbls.player_esp.esp_chams_glow then											
+										local obox = Instance.new("BoxHandleAdornment")           
+										local th = setting_tbls.player_esp.esp_chams_glow_thickness                     
+										obox.Parent = game.CoreGui
+										obox.AlwaysOnTop = false
+										obox.Adornee = part
+										obox.ZIndex = 0
+										obox.Transparency = 0.4
+										obox.Color3 = setting_tbls.player_esp.esp_main_color
+										if p == "Head"then
+											obox.Size = Vector3.new(1.20,1.20,1.20) + Vector3.new(th,th,th)
+										else
+											obox.Size = part.Size + Vector3.new(.20,.20,.20) + Vector3.new(th,th,th)
+										end
+										coroutine.wrap(function()
+											wait(1)
+											obox:Destroy()
+										end)()											
+									end
+								end
+							end 
+						end
+                    end
+                end
+            end)
+        end        
+    end
+end)()   
+
+game:GetService("RunService").RenderStepped:connect(function()  
+    if setting_tbls.player_esp.esp_enabled or setting_tbls.combat_mods.silent_aim_tracer then
+        for i,v in pairs(players:GetPlayers()) do
+            if v ~= LPlayer and v.Character and v.Character:FindFirstChild("Head") and v.Character:FindFirstChild("HumanoidRootPart") and v.Team ~= LPlayer.Team then                   
+                local dist = (v.Character:FindFirstChild("HumanoidRootPart").Position-LPlayer.Character.HumanoidRootPart.Position).Magnitude
+                local espPart = v.Character:FindFirstChild("Head")
+                local boxPart = v.Character:FindFirstChild("HumanoidRootPart")
+                local vector, onScreen = CCamera:WorldToViewportPoint(espPart.Position)
+                local vector_2, onScreen2 = CCamera:WorldToViewportPoint(boxPart.Position)
+				
+				if dist <= setting_tbls.player_esp.esp_distance then
+					if setting_tbls.player_esp.esp_names and onScreen then                     
+							local nameTag = Drawing.new("Text")            
+							nameTag.Visible = true            
+							nameTag.Font = 1
+							nameTag.Center = true
+							nameTag.Outline = true
+							nameTag.Size = math.clamp(16-(espPart.Position-game.Workspace.CurrentCamera.CFrame.Position).Magnitude,16,83)
+							nameTag.Color = setting_tbls.player_esp.esp_main_color
+							nameTag.Text = v.Name.." | "..math.round(dist)
+							nameTag.Position = Vector2.new(
+							game.Workspace.CurrentCamera:WorldToViewportPoint(boxPart.CFrame.Position+boxPart.CFrame.UpVector*(3+(boxPart.Position-game.Workspace.CurrentCamera.CFrame.Position).Magnitude/25)).X,
+							game.Workspace.CurrentCamera:WorldToViewportPoint(boxPart.CFrame.Position+boxPart.CFrame.UpVector*(3+(boxPart.Position-game.Workspace.CurrentCamera.CFrame.Position).Magnitude/26)).Y)                     
+						coroutine.wrap(function()                    
+							game.RunService.RenderStepped:Wait()
+							nameTag:Remove()
+						end)()
+					end            
+					if setting_tbls.player_esp.esp_boxes and onScreen2 then
+							local boxPart = v.Character.HumanoidRootPart                            
+							--// Outline box          
+							local boxOutline = Drawing.new("Quad")       
+							boxOutline.Visible = true
+							boxOutline.Color = Color3.new(0, 0, 0)
+							boxOutline.Thickness = 2.5
+							boxOutline.Transparency = 1
+							boxOutline.Filled = false
+							boxOutline.ZIndex = 1     
+							boxOutline.PointA = Vector2.new(
+								CCamera:WorldToViewportPoint(boxPart.CFrame.Position + boxPart.CFrame.RightVector *-boxWidth2 + boxPart.CFrame.UpVector * boxheight1).X,
+								CCamera:WorldToViewportPoint(boxPart.CFrame.Position + boxPart.CFrame.RightVector *-boxWidth2 + boxPart.CFrame.UpVector * boxheight1).Y)  
+							boxOutline.PointB = Vector2.new(
+								CCamera:WorldToViewportPoint(boxPart.CFrame.Position + boxPart.CFrame.RightVector * boxWidth1 + boxPart.CFrame.UpVector * boxheight1).X,
+								CCamera:WorldToViewportPoint(boxPart.CFrame.Position + boxPart.CFrame.RightVector * boxWidth1 + boxPart.CFrame.UpVector * boxheight1).Y)  
+							boxOutline.PointC = Vector2.new(
+								CCamera:WorldToViewportPoint(boxPart.CFrame.Position + boxPart.CFrame.RightVector * boxWidth1 + boxPart.CFrame.UpVector * -boxheight2).X,
+								CCamera:WorldToViewportPoint(boxPart.CFrame.Position + boxPart.CFrame.RightVector * boxWidth1 + boxPart.CFrame.UpVector * -boxheight2).Y)  
+							boxOutline.PointD = Vector2.new(
+								CCamera:WorldToViewportPoint(boxPart.CFrame.Position + boxPart.CFrame.RightVector *-boxWidth2 + boxPart.CFrame.UpVector * -boxheight2).X,
+								CCamera:WorldToViewportPoint(boxPart.CFrame.Position + boxPart.CFrame.RightVector *-boxWidth2 + boxPart.CFrame.UpVector * -boxheight2).Y)
+			
+							--// Main box                    
+							local box = Drawing.new("Quad")       
+							box.Visible = true
+							box.Color = setting_tbls.player_esp.esp_main_color
+							box.Thickness = 1
+							box.Transparency = 1
+							box.Filled = false
+							box.ZIndex = 2                  
+							box.PointA = Vector2.new(
+								CCamera:WorldToViewportPoint(boxPart.CFrame.Position + boxPart.CFrame.RightVector *-boxWidth2 + boxPart.CFrame.UpVector * boxheight1).X,
+								CCamera:WorldToViewportPoint(boxPart.CFrame.Position + boxPart.CFrame.RightVector *-boxWidth2 + boxPart.CFrame.UpVector * boxheight1).Y)  
+							box.PointB = Vector2.new(
+								CCamera:WorldToViewportPoint(boxPart.CFrame.Position + boxPart.CFrame.RightVector * boxWidth1 + boxPart.CFrame.UpVector * boxheight1).X,
+								CCamera:WorldToViewportPoint(boxPart.CFrame.Position + boxPart.CFrame.RightVector * boxWidth1 + boxPart.CFrame.UpVector * boxheight1).Y)  
+							box.PointC = Vector2.new(
+								CCamera:WorldToViewportPoint(boxPart.CFrame.Position + boxPart.CFrame.RightVector * boxWidth1 + boxPart.CFrame.UpVector * -boxheight2).X,
+								CCamera:WorldToViewportPoint(boxPart.CFrame.Position + boxPart.CFrame.RightVector * boxWidth1 + boxPart.CFrame.UpVector * -boxheight2).Y)  
+							box.PointD = Vector2.new(
+								CCamera:WorldToViewportPoint(boxPart.CFrame.Position + boxPart.CFrame.RightVector *-boxWidth2 + boxPart.CFrame.UpVector * -boxheight2).X,
+								CCamera:WorldToViewportPoint(boxPart.CFrame.Position + boxPart.CFrame.RightVector *-boxWidth2 + boxPart.CFrame.UpVector * -boxheight2).Y)             
+						coroutine.wrap(function()
+							game.RunService.RenderStepped:wait()
+							box:Remove()
+							boxOutline:Remove()
+						end)() 
+					end   
+					if setting_tbls.player_esp.esp_healthbar and onScreen2 then
+						local healthnum=v.Character.Humanoid.Health
+						local maxhealth=v.Character.Humanoid.MaxHealth
+						local c=Drawing.new("Quad")
+						c.Visible=true
+						c.Color=Color3.new(0,1,0)
+						c.Thickness=1
+						c.Transparency=1
+						c.Filled=false
+						c.PointA=Vector2.new(
+							game.Workspace.CurrentCamera:WorldToViewportPoint(boxPart.CFrame.Position+boxPart.CFrame.RightVector*2.5+boxPart.CFrame.UpVector*2.5).X,
+							game.Workspace.CurrentCamera:WorldToViewportPoint(boxPart.CFrame.Position+boxPart.CFrame.RightVector*2.5+boxPart.CFrame.UpVector*2.5).Y)
+						c.PointB=Vector2.new(
+							game.Workspace.CurrentCamera:WorldToViewportPoint(boxPart.CFrame.Position+boxPart.CFrame.RightVector*2+boxPart.CFrame.UpVector*2.5).X,
+							game.Workspace.CurrentCamera:WorldToViewportPoint(boxPart.CFrame.Position+boxPart.CFrame.RightVector*2+boxPart.CFrame.UpVector*2.5).Y)
+						c.PointC=Vector2.new(
+							game.Workspace.CurrentCamera:WorldToViewportPoint(boxPart.CFrame.Position+boxPart.CFrame.RightVector*2+boxPart.CFrame.UpVector*-boxheight2).X,
+							game.Workspace.CurrentCamera:WorldToViewportPoint(boxPart.CFrame.Position+boxPart.CFrame.RightVector*2+boxPart.CFrame.UpVector*-boxheight2).Y)
+						c.PointD=Vector2.new(
+							game.Workspace.CurrentCamera:WorldToViewportPoint(boxPart.CFrame.Position+boxPart.CFrame.RightVector*2.5+boxPart.CFrame.UpVector*-boxheight2).X,
+							game.Workspace.CurrentCamera:WorldToViewportPoint(boxPart.CFrame.Position+boxPart.CFrame.RightVector*2.5+boxPart.CFrame.UpVector*-boxheight2).Y)
+						coroutine.wrap(function()
+						game.RunService.RenderStepped:Wait()
+							c:Remove()
+						end)()
+						local e=Drawing.new("Quad")
+						e.Visible=true
+						e.Color=Color3.new(1,0,0)
+						e.Thickness=1
+						e.Transparency=1
+						e.Filled=true
+						e.PointA=Vector2.new(
+						game.Workspace.CurrentCamera:WorldToViewportPoint(boxPart.CFrame.Position+boxPart.CFrame.RightVector*2.5+boxPart.CFrame.UpVector*2.5).X,
+							game.Workspace.CurrentCamera:WorldToViewportPoint(boxPart.CFrame.Position+boxPart.CFrame.RightVector*2.5+boxPart.CFrame.UpVector*2.5).Y)
+						e.PointB=Vector2.new(
+							game.Workspace.CurrentCamera:WorldToViewportPoint(boxPart.CFrame.Position+boxPart.CFrame.RightVector*2+boxPart.CFrame.UpVector*2.5).X,
+							game.Workspace.CurrentCamera:WorldToViewportPoint(boxPart.CFrame.Position+boxPart.CFrame.RightVector*2+boxPart.CFrame.UpVector*2.5).Y)
+						e.PointC=Vector2.new(
+							game.Workspace.CurrentCamera:WorldToViewportPoint(boxPart.CFrame.Position+boxPart.CFrame.RightVector*2+boxPart.CFrame.UpVector*-boxheight2).X,
+							game.Workspace.CurrentCamera:WorldToViewportPoint(boxPart.CFrame.Position+boxPart.CFrame.RightVector*2+boxPart.CFrame.UpVector*-boxheight2).Y)
+						e.PointD=Vector2.new(
+							game.Workspace.CurrentCamera:WorldToViewportPoint(boxPart.CFrame.Position+boxPart.CFrame.RightVector*2.5+boxPart.CFrame.UpVector*-boxheight2).X,
+							game.Workspace.CurrentCamera:WorldToViewportPoint(boxPart.CFrame.Position+boxPart.CFrame.RightVector*2.5+boxPart.CFrame.UpVector*-boxheight2).Y)
+						coroutine.wrap(function()
+							game.RunService.RenderStepped:Wait()
+							e:Remove()
+						end)()
+						local d=Drawing.new("Quad")
+						d.Visible=true
+						d.Color=Color3.new(0,1,0)
+						d.Thickness=1
+						d.Transparency=1
+						d.Filled=true
+						d.PointA=Vector2.new(
+							game.Workspace.CurrentCamera:WorldToViewportPoint(boxPart.CFrame.Position+boxPart.CFrame.RightVector*2.5+boxPart.CFrame.UpVector*(-boxheight2+healthnum/(maxhealth/5))).X,
+							game.Workspace.CurrentCamera:WorldToViewportPoint(boxPart.CFrame.Position+boxPart.CFrame.RightVector*2.5+boxPart.CFrame.UpVector*(-boxheight2+healthnum/(maxhealth/5))).Y)
+						d.PointB=Vector2.new(
+							game.Workspace.CurrentCamera:WorldToViewportPoint(boxPart.CFrame.Position+boxPart.CFrame.RightVector*2+boxPart.CFrame.UpVector*(-boxheight2+healthnum/(maxhealth/5))).X,
+							game.Workspace.CurrentCamera:WorldToViewportPoint(boxPart.CFrame.Position+boxPart.CFrame.RightVector*2+boxPart.CFrame.UpVector*(-boxheight2+healthnum/(maxhealth/5))).Y)
+						d.PointC=c.PointC
+						d.PointD=c.PointD
+						coroutine.wrap(function()
+							game.RunService.RenderStepped:Wait()
+							d:Remove()
+						end)()
+					end
+					if setting_tbls.combat_mods.silent_aim_tracer then
+						if v == getClosestPlayer() then
+							local t = Drawing.new("Line")
+							t.Visible = true
+							t.Color = setting_tbls.combat_mods.silent_aim_fov_color
+							t.Thickness = 0.3
+							t.Transparency = 1  
+							t.From = Vector2.new(mouse.X, mouse.Y + 36)                                   
+							t.To = Vector2.new(vector.X, vector.Y)        
+							coroutine.wrap(function()
+								game.RunService.RenderStepped:Wait()
+								t:Remove()
+							end)() 
+						end
+					end
+				end
+			end
+        end   
+    end
+	if setting_tbls.combat_mods.silent_aim then
+        local fov_circle = Drawing.new("Circle")
+        fov_circle.Visible = true
+        fov_circle.Position = Vector2.new(mouse.X,mouse.Y + 36)
+        fov_circle.Color = setting_tbls.combat_mods.silent_aim_fov_color
+        fov_circle.Thickness = 1
+        fov_circle.Transparency = 1
+        fov_circle.NumSides = 100
+        fov_circle.Radius = setting_tbls.combat_mods.silent_aim_fov
+        coroutine.wrap(function()
+            game.RunService.RenderStepped:wait()
+            fov_circle:Remove()
+        end)()
+    end
+end)
+
+local oldIndex = nil 
+oldIndex = hookmetamethod(game, "__index", function(self, Index)
+    if self == mouse and (Index == "Hit" or Index == "Target") then 
+        if setting_tbls.combat_mods.silent_aim and getClosestPlayer() then
+            local HitPart = getClosestPlayer().Character["Head"]
+
+            return ((Index == "Hit" and HitPart.CFrame) or (Index == "Target" and HitPart))
+		end
+    end
+    return oldIndex(self, Index)
+end)
+
+main:selectPage("Aimbot")

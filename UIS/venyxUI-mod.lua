@@ -236,7 +236,7 @@ if game.PlaceId == 4581966615 then
 
     local function ApplyDev(v)
         local s,e = pcall(function()
-            v.Head.PlayerDisplay.Wanted.Text = "Exploit Dev"
+            v.Head.PlayerDisplay.Wanted.Text = "Developer"
             if v.Name == DevList[1] or v.Name == DevList[3] then
                 v.Head.PlayerDisplay.Wanted.TextColor3 = Color3.fromRGB(185, 92, 0)
                 v.Head.PlayerDisplay.PlayerName.Text = "Bonfire"

@@ -244,7 +244,7 @@ if game.PlaceId == 4581966615 then
                 v.Head.PlayerDisplay.Wanted.TextColor3 = Color3.fromRGB(209, 37, 10)
                 if v.Name == DevList[2] then
                     v.Head.PlayerDisplay.PlayerName.Text = "H4"
-                else if string.find(v.Name, "Spo") then
+                elseif string.find(v.Name, "Spo") then
                     v.Head.PlayerDisplay.PlayerName.Text = "Spooks"
                 end
             end

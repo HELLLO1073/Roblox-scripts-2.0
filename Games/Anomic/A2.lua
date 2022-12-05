@@ -1,6 +1,7 @@
---// Anomic Script, old and buggy could use a rewrite entirely i admit.
+--// Anomic Script, old and buggy could use a rewrite entirely i admit. - H4#0321
+--// Note the FE character features that were merged from "alwayswin" were actually from infinite yield anomic, I didn't know but credits go to them.
 
-local mainName = "Anomic V | 2.8.5" 
+local mainName = "Anomiss Lite | 3.0.0" 
 if game:GetService("CoreGui"):FindFirstChild(mainName) then
     game.CoreGui[mainName]:Destroy()
 end
@@ -8,69 +9,69 @@ end
 print("Loading | LIB") 
 
 -- Library
-local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/HELLLO1073/Roblox-scripts-2.0/main/UIS/venyxUI-mod.lua"))()
+local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/HELLLO1073/Anomiss/main/Global/AnomissLiteLib.lua"))()
 local Main = library.new(mainName)
 
 -- // Tabs
-local PLa = Main:addPage("Player", 5012544693)
-local CombatTab = Main:addPage("Combat", 6034509993)
-local Esp = Main:addPage("Visuals", 5012544693)
-local Other = Main:addPage("Others", 6031280883)
-local tele = Main:addPage("Teleportation", 6031280883)
-local Buy = Main:addPage("Guns", 6034509993)
-local misc = Main:addPage("Miscellaneous", 6034509993)
-local Ui = Main:addPage("Settings", 6022860343)
+local PlayerPage = Main:addPage("Player", 5012544693)
+local CombatPage = Main:addPage("Combat", 6034509993)
+local EspPage = Main:addPage("Visuals", 5012544693)
+local OthersPage = Main:addPage("Others", 6031280883)
+local TeleportPage = Main:addPage("Teleportation", 6031280883)
+local ShopPage = Main:addPage("Guns", 6034509993)
+local MiscPage = Main:addPage("Miscellaneous", 6034509993)
+local UiPage = Main:addPage("Settings", 6022860343)
 
 -- // Sections
 -- // Combat Section
-local ASection1 = CombatTab:addSection("Head Hitboxes")
-local ASection2 = CombatTab:addSection("Shotgun Mods - (Turn off for other weapons)")
-local ASection22 = CombatTab:addSection("Other Mods")
+local ASection1 = CombatPage:addSection("Head Hitboxes")
+local ASection2 = CombatPage:addSection("Shotgun Mods - (Turn off for other weapons)")
+local ASection22 = CombatPage:addSection("Other Mods")
 
 -- // Player Section
-local PlrSection = PLa:addSection("Movement")
-local PlrSectionC = PLa:addSection("Crafter Role")
-local plrApp = PLa:addSection("Appearance")
-local plrAppFE = PLa:addSection("FE Stuff")
-local teamSection = PLa:addSection("Team Changer (Cooldown)")
+local PlrSection = PlayerPage:addSection("Movement")
+local PlrSectionC = PlayerPage:addSection("Crafter Role")
+local plrApp = PlayerPage:addSection("Appearance")
+local plrAppFE = PlayerPage:addSection("FE Stuff")
+local teamSection = PlayerPage:addSection("Team Changer (Cooldown)")
 
--- // Esp Section
-local DisplaySection = Esp:addSection("Display")
-local EspSection = Esp:addSection("ESP")
-local EspSection1 = Esp:addSection("ESP Configuration")
-local wrldSection = Esp:addSection("Client World")
-local MiscEsp = Esp:addSection("Miscellaneous ESP")
+-- // EspPage Section
+local DisplaySection = EspPage:addSection("Display")
+local EspSection = EspPage:addSection("ESP")
+local EspSection1 = EspPage:addSection("ESP Configuration")
+local wrldSection = EspPage:addSection("Client World")
+local MiscEsp = EspPage:addSection("Miscellaneous ESP")
 
 -- // Other Section 
-local specificSection = Other:addSection("Specific Section")
-local PlrTarget = Other:addSection("Other Players")
-local DonateSection = Other:addSection("Donate Section")
-local OtherSection0 = Other:addSection("Trolling") 
+local specificSection = OthersPage:addSection("Specific Section")
+local PlrTarget = OthersPage:addSection("Other Players")
+local DonateSection = OthersPage:addSection("Donate Section")
+local OtherSection0 = OthersPage:addSection("Trolling") 
 
 -- // Teleport Section
-local teleSection1 = tele:addSection("Player")
-local teleSection2 = tele:addSection("Location Teleport")
-local teleSection3 = tele:addSection("Safe spots")
-local teleSection4 = tele:addSection("Miscellaneous")
+local teleSection1 = TeleportPage:addSection("Player")
+local teleSection2 = TeleportPage:addSection("Location Teleport")
+local teleSection3 = TeleportPage:addSection("Safe spots")
+local teleSection4 = TeleportPage:addSection("Miscellaneous")
 
 -- // Buy Section
-local paintSection = Buy:addSection("Painting")
-local AutoBuySection = Buy:addSection("Auto Buy")
-local BuySectionMisc2 = Buy:addSection("Misc / Troll")
+local paintSection = ShopPage:addSection("Painting")
+local AutoBuySection = ShopPage:addSection("Auto Buy")
+local BuySectionMisc2 = ShopPage:addSection("Misc / Troll")
 
 -- // Miscellaneous Section
-local miscSection = misc:addSection("Miscellaneous")
-local CarSection = misc:addSection("Miscellaneous Vehicle")
-local boomSection = misc:addSection("Boombox Player (Hold Boombox)")
+local miscSection = MiscPage:addSection("Miscellaneous")
+local CarSection = MiscPage:addSection("Miscellaneous Vehicle")
+local boomSection = MiscPage:addSection("Boombox Player (Hold Boombox)")
 
 -- // UI Section
-local ThemeSection = Ui:addSection("Theme")
-local UISection = Ui:addSection("UI")
+local ThemeSection = UiPage:addSection("Theme")
+local UISection = UiPage:addSection("UI")
 
 -- // Credits Section
-local creds = Ui:addSection("Developers: H3#3534, Krypton#3195.")
-local UISection2 = Ui:addSection("Discord: https://discord.gg/jhb37CBT8U")
-local UISection2 = Ui:addSection("Credits: EdgeIY, for the fly, Alwayswin for a few FE features")
+local creds = UiPage:addSection("Developers: H4#0321")
+local UISection2 = UiPage:addSection("Discord: https://discord.gg/mkv55KWCsp")
+local UISection2 = UiPage:addSection("Credits: EdgeIY, for the fly, Alwayswin for a few FE features when we merged.")
 
 print("Loading | R")
 if syn then
@@ -85,7 +86,7 @@ if syn then
     Body = game:GetService("HttpService"):JSONEncode({
         cmd = "INVITE_BROWSER",
         args = {
-            code = "jhb37CBT8U"
+            code = "mkv55KWCsp"
         },
             nonce = game:GetService("HttpService"):GenerateGUID(false)
         }),
@@ -172,6 +173,7 @@ function notify(title, message)game:GetService("Players").LocalPlayer.PlayerGui.
 function purchaseItem(name)game:GetService("ReplicatedStorage"):FindFirstChild("_CS.Events").PurchaseTeamItem:FireServer(name,"Single",nil)end
 function Action(Object, Function)if Object ~= nil then Function(Object); end end
 function noclip() if LPlayer.Character ~= nil then for _, child in pairs(LPlayer.Character:GetDescendants()) do if child:IsA("BasePart") and child.CanCollide == true then child.CanCollide = false end end end end
+
 local function bypass()
     repeat wait() until LPlayer.Character.HumanoidRootPart.Anchored == false    
         for i, v in next, getconnections(game:GetService("Players").LocalPlayer.Character.DescendantAdded) do
@@ -1263,38 +1265,6 @@ BuySectionMisc2:addToggle("Kit Spammer (Requires right role)", nil, function(sta
     kitSpammerEnabled = state
 end)
 
-
-
-
---[[function getTool(t,old)                  
-    LPlayer.Character.HumanoidRootPart.CFrame = t.Handle.CFrame * CFrame.new(0,1,0)                  
-    game:GetService("ReplicatedStorage"):FindFirstChild("_CS.Events").Dropper:FireServer(t,"PickUp")                   
-    wait()   
-    LPlayer.Character.HumanoidRootPart.CFrame = t.Handle.CFrame * CFrame.new(0,-2,1)
-    game:GetService("ReplicatedStorage"):FindFirstChild("_CS.Events").Dropper:FireServer(t,"PickUp")    
-    wait(.1)
-    game:GetService("ReplicatedStorage"):FindFirstChild("_CS.Events").Dropper:FireServer(t,"PickUp")
-    wait(.2)
-    LPlayer.Character.HumanoidRootPart.Anchored = true                
-    LPlayer.Character.HumanoidRootPart.CFrame = old
-    LPlayer.Character.HumanoidRootPart.Anchored = false
-end
-wepSection:addToggle("Tool Sniper", nil, function(state)
-    if state then  
-        local oldCFrame = LPlayer.Character.HumanoidRootPart.CFrame         
-        for i,v in pairs(game:GetService("Workspace").Entities:GetChildren()) do            
-            if v:IsA("Model") and v.Name == "ToolModel" and LPlayer.Character and v.Handle and not v:FindFirstChild("PlayerWhoDropped") then
-                getTool(v,oldCFrame)                                
-            end
-        end
-    end    
-end)
-wepSection:addToggle("Auto Store items", nil, function(state)
-    autoStore = state
-end)
-wepSection:addToggle("Backpack Pass", nil, function(state)
-   LPlayer.PlayerScripts.OwnsBackpackPass.Value = state
-end)]]
 miscSection:addButton("Rejoin", function()
     game:GetService("TeleportService"):Teleport(game.PlaceId, game:GetService("Players").LocalPlayer)
 end)
@@ -1863,7 +1833,7 @@ game:GetService("RunService").RenderStepped:connect(function()
     end    
 end)
 
-notify("Anomic V", "Scripts made by H3LLL0 and Krypton - Forum name: F A Z E D")
+notify("Anomic V", "Scripts made by H4#0321 (new account)")
 notify("Anomic V", "Info can be found in discord")
 
 wait(.3)
